@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>media sosial - XI TJKT 2</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: monospace;
+            background: linear-gradient(135deg, #1a1a40, #0f0c29);
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 100%;
+            padding-top: 30px;
+        }
+
+        header {
+            text-align: center;
+            padding-top: 20px;
+            color: white;
+        }
+
+        ul {
+            display: flex;
+            gap: 15px;
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        li {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgb(30, 44, 237);
+            color: #F5EEFF;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        li:hover {
+            background: linear-gradient(135deg, #3a3a80, #1a1a40);
+        }
+
+        li.active {
+            background: linear-gradient(135deg, #2b2bf6, #1a1a40);
+        }
+
+        a {
+            text-decoration: none;
+            color: white;
+        }
+
+        section {
+            border: 1px solid cyan;
+            padding: 25px;
+            border-radius: 15px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 30px;
+            width: 80%;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        section:hover {
+            background-color: rgba(240, 16, 60, 0.1);
+            transform: scale(1.02);
+        }
+
+        section a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            font-size: 1.2rem;
+        }
+
+        span {
+            font-size: 30px;
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            margin: 12px;
+            padding: 50px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>XI TJKT 2</h1>
+        <small>class program</small>
+    </header>
+
+    <main>
+        <ul>
+            <li><a href="struktur.html">STURKTUR</a></li>
+            <li><a href="media_sosial.html" class="active">MEDIA SOSIAL</a></li>
+            <li><a href="cerita.html">FOTO</a></li>
+          
+        </ul>
+
+        <section>
+            <a href="https://www.tiktok.com/@theclass_tekaje?_r=1&_t=ZS-99cIc0QcJWK" target="_blank">
+                <i class="fa-brands fa-tiktok"></i>
+                <span>TIKTOK</span>
+            </a>
+        </section>
+
+        <section>
+            <a href="https://chat.whatsapp.com/Jqk1FqyI16u1uu24r5zNPm" target="_blank">
+                <i class="fa-brands fa-whatsapp"></i>
+                <span>WHATSAPP</span>
+            </a>
+        </section>
+
+        <section>
+            <a href="https://www.instagram.com/mmoris.eleventjkttwo_?stkn=dnF6eWd2dTl5dTdz" target="_blank">
+                <i class="fa-brands fa-instagram"></i>
+                <span>INSTAGRAM</span>
+            </a>
+        </section>
+    </main>
+
+    <footer>
+        <small>&copy; adli yanuar firmansyah.</small>
+    </footer>
+</body>
+</html>

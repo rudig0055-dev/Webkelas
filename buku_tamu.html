@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>buku tamu - XI TJKT 2</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: monospace;
+            background: linear-gradient(135deg, #1a1a40, #0f0c29);
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 100%;
+            padding-top: 30px;
+        }
+
+        header {
+            text-align: center;
+            padding-top: 20px;
+            color: white;
+        }
+
+        ul {
+            display: flex;
+            gap: 15px;
+            list-style: none;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        li {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgb(30, 44, 237);
+            color: #F5EEFF;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        li:hover {
+            background: linear-gradient(135deg, #3a3a80, #1a1a40);
+        }
+
+        li.active {
+            background: linear-gradient(135deg, #2b2bf6, #1a1a40);
+        }
+
+        a {
+            text-decoration: none;
+            color: white;
+        }
+
+        section {
+            border: 1px solid cyan;
+            padding: 30px;
+            border-radius: 15px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 30px;
+            width: 80%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        h3 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        mark {
+            background: linear-gradient(135deg, #2b2bf6, #1a1a40);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #F5EEFF;
+            font-size: 0.9rem;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid rgb(30, 44, 237);
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+            font-family: monospace;
+            outline: none;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            border-color: cyan;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            background: linear-gradient(135deg, #2b2bf6, #1a1a40);
+            color: white;
+            font-family: monospace;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: 0.3s ease;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #3a3a80, #1a1a40);
+            transform: scale(1.02);
+        }
+
+        .pesan-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            text-align: left;
+            position: relative;
+        }
+
+        .pesan-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2b2bf6, #1a1a40);
+            border: 1px solid cyan;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .pesan-content {
+            flex-grow: 1;
+        }
+
+        .pesan-content h4 {
+            color: cyan;
+            margin-bottom: 4px;
+            font-size: 1rem;
+        }
+
+        .pesan-content p {
+            color: #F5EEFF;
+            font-size: 0.9rem;
+            word-break: break-word;
+        }
+
+        .btn-hapus {
+            background: none;
+            border: none;
+            color: #ff4d4d;
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 5px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: auto;
+            box-shadow: none;
+        }
+
+        .btn-hapus:hover {
+            background: rgba(255, 0, 0, 0.1);
+            transform: scale(1.1);
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            margin: 12px;
+            padding: 50px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>XI TJKT 2</h1>
+        <small>class program</small>
+    </header>
+
+    <main>
+        <ul>
+            <li><a href="struktur.html">STRUKTUR</a></li>
+            <li><a href="media_sosial.html">MEDIA SOSIAL</a></li>
+            <li><a href="cerita.html">FOTO</a></li>
+            <li><a href="buku_tamu.html" class="active">PESAN</a></li>
+        </ul>
+
+        <section>
+            <h3><mark>Buku Tamu Digital</mark></h3>
+            <form id="formBukuTamu">
+                <div class="form-group">
+                    <label for="nama">Nama Kamu:</label>
+                    <input type="text" id="nama" placeholder="Masukkan nama kamu..." required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="pesan">Tulis Pesan Kenangan:</label>
+                    <textarea id="pesan" rows="4" placeholder="Tulis pesan atau kesan & pesan di kelas..." required></textarea>
+                </div>
+
+                <button type="submit" id="btnKirim">Kirim Pesan</button>
+            </form>
+        </section>
+
+        <section>
+            <h3><mark>Pesan Kenangan Masuk</mark></h3>
+            <div id="daftarPesan">
+                <p style="text-align: center; color: gray;">Memuat pesan...</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <small>&copy; 2026 diki firmansyah. All Rights Reserved.</small>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Ganti dengan konfigurasi Firebase milik kamu sendiri!
+        const firebaseConfig = {
+            apiKey: "MASUKKAN_API_KEY_KAMU",
+            authDomain: "MASUKKAN_AUTH_DOMAIN_KAMU",
+            projectId: "MASUKKAN_PROJECT_ID_KAMU",
+            storageBucket: "MASUKKAN_STORAGE_BUCKET_KAMU",
+            messagingSenderId: "MASUKKAN_MESSAGING_SENDER_ID_KAMU",
+            appId: "MASUKKAN_APP_ID_KAMU"
+        };
+
+        // Inisialisasi Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const form = document.getElementById('formBukuTamu');
+        const daftarPesan = document.getElementById('daftarPesan');
+        const btnKirim = document.getElementById('btnKirim');
+
+        // Kirim Pesan ke Firestore
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const nama = document.getElementById('nama').value;
+            const pesan = document.getElementById('pesan').value;
+
+            btnKirim.innerText = "Mengirim...";
+            btnKirim.disabled = true;
+
+            try {
+                await addDoc(collection(db, "buku_tamu"), {
+                    nama: nama,
+                    pesan: pesan,
+                    waktu: Date.now()
+                });
+
+                form.reset();
+            } catch (error) {
+                console.error("Gagal mengirim pesan: ", error);
+                alert("Gagal mengirim pesan!");
+            } finally {
+                btnKirim.innerText = "Kirim Pesan";
+                btnKirim.disabled = false;
+            }
+        });
+
+        // Ambil dan Tampilkan Pesan Secara Real-Time dari Firestore
+        const q = query(collection(db, "buku_tamu"), orderBy("waktu", "desc"));
+        onSnapshot(q, (querySnapshot) => {
+            daftarPesan.innerHTML = '';
+
+            if (querySnapshot.empty) {
+                daftarPesan.innerHTML = '<p style="text-align: center; color: gray;">Belum ada pesan kenangan.</p>';
+                return;
+            }
+
+            querySnapshot.forEach((docSnapshot) => {
+                const item = docSnapshot.data();
+                const id = docSnapshot.id;
+
+                const div = document.createElement('div');
+                div.classList.add('pesan-item');
+                div.innerHTML = `
+                    <div class="pesan-avatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="pesan-content">
+                        <h4>${escapeHtml(item.nama)}</h4>
+                        <p>${escapeHtml(item.pesan)}</p>
+                    </div>
+                    <button class="btn-hapus" onclick="hapusPesan('${id}')" title="Hapus Pesan">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                `;
+                daftarPesan.appendChild(div);
+            });
+        });
+
+        // Fungsi Hapus Pesan dari Database Online
+        window.hapusPesan = async function(id) {
+            if (confirm("Yakin ingin menghapus pesan ini?")) {
+                try {
+                    await deleteDoc(doc(db, "buku_tamu", id));
+                } catch (error) {
+                    console.error("Gagal menghapus: ", error);
+                    alert("Gagal menghapus pesan.");
+                }
+            }
+        }
+
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+        }
+    </script>
+</body>
+</html>

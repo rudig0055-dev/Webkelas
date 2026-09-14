@@ -1,161 +1,1137 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>siswa - XI TJKT 2</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: monospace; background: linear-gradient(135deg, #1a1a40, #0f0c29); color: #fff; min-height: 100vh; overflow-x: hidden; }
-        .menu-toggle { position: fixed; top: 20px; left: 20px; background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(10px); border: 1px solid rgb(30, 44, 237); color: white; padding: 10px 14px; border-radius: 10px; cursor: pointer; z-index: 1000; font-size: 1.2rem; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); }
-        .sidebar { position: fixed; top: 0; left: -250px; width: 250px; height: 100%; background: rgba(15, 12, 41, 0.95); backdrop-filter: blur(15px); border-right: 1px solid cyan; display: flex; flex-direction: column; padding-top: 80px; transition: 0.3s ease; z-index: 999; box-shadow: 5px 0 20px rgba(0, 0, 0, 0.5); }
-        .sidebar.active { left: 0; }
-        .sidebar ul { list-style: none; padding: 0 20px; }
-        .sidebar li { margin-bottom: 15px; text-align: left; background: rgba(255, 255, 255, 0.05); border: 1px solid rgb(30, 44, 237); border-radius: 10px; padding: 10px 15px; transition: 0.2s; }
-        .sidebar li:hover, .sidebar li.active { background: linear-gradient(135deg, #2b2bf6, #1a1a40); border-color: cyan; }
-        .sidebar a { text-decoration: none; color: white; display: block; font-size: 1rem; }
-        main { display: flex; justify-content: center; align-items: center; flex-direction: column; width: 100%; padding: 40px 10px 20px 10px; }
-        header { text-align: center; padding-top: 25px; color: white; }
-        section { border: 1px solid cyan; padding: 20px 15px; border-radius: 15px; margin-top: 25px; width: 95%; max-width: 480px; text-align: center; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
-        h3 { font-size: 1.1rem; margin-bottom: 20px; }
-        mark { background: linear-gradient(135deg, #2b2bf6, #1a1a40); color: white; padding: 4px 12px; border-radius: 5px; }
-        .grid-siswa { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px 10px; align-items: start; }
-        .card-siswa { display: flex; flex-direction: column; align-items: center; text-align: center; }
-        .foto-lingkaran { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid cyan; box-shadow: 0 0 10px rgba(0, 255, 255, 0.3); background: rgba(255, 255, 255, 0.1); }
-        .nama-siswa { font-size: 0.72rem; color: #F5EEFF; margin-top: 6px; width: 100%; word-wrap: break-word; line-height: 1.2; }
-        footer { text-align: center; color: white; margin: 12px; padding: 40px; font-size: 0.8rem; }
-              /* Efek latar belakang partikel bintang bergerak */
-        #particleCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            pointer-events: none;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    </style>
+<title>Data Member - XI TJKT 2</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+    --cyan:#00eaff;
+    --blue:#2b2bf6;
+    --bg1:#1a1a40;
+    --bg2:#0f0c29;
+    --card:rgba(255,255,255,.06);
+    --text:#fff;
+    --muted:#b9c0d0;
+}
+
+body{
+    font-family:monospace;
+    background:linear-gradient(135deg,var(--bg1),var(--bg2));
+    color:var(--text);
+    min-height:100vh;
+    overflow-x:hidden;
+    transition:.3s;
+}
+
+body.light{
+    --bg1:#eefcff;
+    --bg2:#dbe8ff;
+    --card:rgba(255,255,255,.65);
+    --text:#10152c;
+    --muted:#47506a;
+    background:linear-gradient(135deg,var(--bg1),var(--bg2));
+}
+
+/* PARTICLE */
+#particleCanvas{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    z-index:-1;
+    pointer-events:none;
+}
+
+/* MENU */
+.menu-toggle{
+    position:fixed;
+    top:18px;
+    left:18px;
+    width:46px;
+    height:46px;
+    border:1px solid var(--cyan);
+    border-radius:12px;
+    background:rgba(0,0,0,.25);
+    backdrop-filter:blur(12px);
+    color:var(--text);
+    cursor:pointer;
+    z-index:1001;
+    font-size:20px;
+    box-shadow:0 0 15px rgba(0,234,255,.2);
+    transition:.3s;
+}
+
+.menu-toggle:hover{
+    transform:scale(1.08);
+    box-shadow:0 0 25px rgba(0,234,255,.45);
+}
+
+/* SIDEBAR */
+.sidebar{
+    position:fixed;
+    top:0;
+    left:-270px;
+    width:270px;
+    height:100vh;
+    padding:85px 20px 20px;
+    background:rgba(10,10,35,.94);
+    backdrop-filter:blur(18px);
+    border-right:1px solid var(--cyan);
+    box-shadow:5px 0 30px rgba(0,0,0,.5);
+    z-index:1000;
+    transition:.35s ease;
+}
+
+.sidebar.active{
+    left:0;
+}
+
+.sidebar-title{
+    text-align:center;
+    margin-bottom:25px;
+    color:var(--cyan);
+    font-size:1rem;
+}
+
+.sidebar ul{
+    list-style:none;
+}
+
+.sidebar li{
+    margin-bottom:12px;
+    border:1px solid rgba(43,43,246,.8);
+    border-radius:12px;
+    background:rgba(255,255,255,.05);
+    transition:.25s;
+    overflow:hidden;
+}
+
+.sidebar li:hover,
+.sidebar li.active{
+    border-color:var(--cyan);
+    background:linear-gradient(135deg,#2b2bf6,#17173e);
+    transform:translateX(4px);
+}
+
+.sidebar a{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px 14px;
+    color:white;
+    text-decoration:none;
+    font-size:.9rem;
+}
+
+.sidebar a i{
+    width:20px;
+    text-align:center;
+}
+
+/* HEADER */
+header{
+    text-align:center;
+    padding:80px 20px 20px;
+}
+
+.logo{
+    color:var(--cyan);
+    font-size:.85rem;
+    letter-spacing:3px;
+    margin-bottom:8px;
+}
+
+header h1{
+    font-size:2rem;
+    text-shadow:0 0 15px rgba(0,234,255,.35);
+}
+
+header p{
+    color:var(--muted);
+    margin-top:8px;
+}
+
+/* CLOCK */
+.clock{
+    margin:15px auto 0;
+    width:max-content;
+    padding:8px 15px;
+    border:1px solid rgba(0,234,255,.5);
+    border-radius:20px;
+    background:rgba(255,255,255,.05);
+    color:var(--cyan);
+}
+
+/* MAIN */
+main{
+    width:100%;
+    max-width:1100px;
+    margin:auto;
+    padding:15px 20px 50px;
+}
+
+/* STATS */
+.stats{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.stat-card{
+    padding:20px;
+    border:1px solid rgba(0,234,255,.45);
+    border-radius:16px;
+    background:var(--card);
+    backdrop-filter:blur(12px);
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,.2);
+}
+
+.stat-card i{
+    color:var(--cyan);
+    font-size:1.4rem;
+    margin-bottom:8px;
+}
+
+.stat-card strong{
+    display:block;
+    font-size:1.5rem;
+}
+
+.stat-card span{
+    color:var(--muted);
+    font-size:.75rem;
+}
+
+/* CONTENT */
+.member-box{
+    border:1px solid var(--cyan);
+    border-radius:20px;
+    padding:25px;
+    background:var(--card);
+    backdrop-filter:blur(14px);
+    box-shadow:0 15px 35px rgba(0,0,0,.3);
+}
+
+.section-title{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.section-title span{
+    display:inline-block;
+    padding:8px 16px;
+    border-radius:8px;
+    background:linear-gradient(135deg,var(--blue),#17173e);
+    border:1px solid var(--cyan);
+}
+
+/* SEARCH */
+.search-box{
+    position:relative;
+    max-width:500px;
+    margin:0 auto 25px;
+}
+
+.search-box i{
+    position:absolute;
+    left:15px;
+    top:50%;
+    transform:translateY(-50%);
+    color:var(--cyan);
+}
+
+.search-box input{
+    width:100%;
+    padding:13px 15px 13px 42px;
+    border:1px solid rgba(0,234,255,.5);
+    border-radius:12px;
+    outline:none;
+    background:rgba(0,0,0,.2);
+    color:var(--text);
+    font-family:monospace;
+}
+
+.search-box input::placeholder{
+    color:var(--muted);
+}
+
+/* GRID */
+.grid-siswa{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:18px 12px;
+}
+
+/* CARD */
+.card-siswa{
+    position:relative;
+    padding:12px 6px;
+    border:1px solid transparent;
+    border-radius:15px;
+    text-align:center;
+    transition:.3s;
+}
+
+.card-siswa:hover{
+    border-color:rgba(0,234,255,.5);
+    background:rgba(0,234,255,.04);
+    transform:translateY(-5px);
+}
+
+.foto-wrapper{
+    position:relative;
+    width:78px;
+    height:78px;
+    margin:auto;
+}
+
+.foto-lingkaran{
+    width:78px;
+    height:78px;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid var(--cyan);
+    background:rgba(255,255,255,.08);
+    box-shadow:0 0 15px rgba(0,234,255,.25);
+    cursor:pointer;
+    transition:.3s;
+}
+
+.card-siswa:hover .foto-lingkaran{
+    box-shadow:0 0 25px rgba(0,234,255,.55);
+}
+
+.nama-siswa{
+    display:block;
+    margin-top:9px;
+    font-size:.72rem;
+    line-height:1.25;
+    color:var(--text);
+    word-break:break-word;
+}
+
+/* EMPTY */
+.empty{
+    display:none;
+    text-align:center;
+    padding:30px;
+    color:var(--muted);
+}
+
+/* LIGHTBOX */
+.lightbox{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.88);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:2000;
+    padding:20px;
+}
+
+.lightbox.show{
+    display:flex;
+}
+
+.lightbox img{
+    max-width:90vw;
+    max-height:85vh;
+    border-radius:15px;
+    border:2px solid var(--cyan);
+    box-shadow:0 0 40px rgba(0,234,255,.4);
+}
+
+.close-lightbox{
+    position:absolute;
+    top:20px;
+    right:25px;
+    width:45px;
+    height:45px;
+    border:1px solid var(--cyan);
+    border-radius:50%;
+    background:rgba(0,0,0,.5);
+    color:white;
+    cursor:pointer;
+    font-size:20px;
+}
+
+/* BUTTONS */
+.tools{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.tool-btn{
+    border:1px solid var(--cyan);
+    background:rgba(255,255,255,.05);
+    color:var(--text);
+    padding:9px 13px;
+    border-radius:10px;
+    cursor:pointer;
+    font-family:monospace;
+}
+
+.tool-btn:hover{
+    background:var(--cyan);
+    color:#07101d;
+}
+
+/* TOP */
+#topBtn{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    border:1px solid var(--cyan);
+    background:rgba(15,12,41,.8);
+    color:var(--cyan);
+    cursor:pointer;
+    display:none;
+    z-index:900;
+}
+
+/* FOOTER */
+footer{
+    text-align:center;
+    padding:35px 20px;
+    color:var(--muted);
+    font-size:.8rem;
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+    .grid-siswa{
+        grid-template-columns:repeat(4,1fr);
+    }
+}
+
+@media(max-width:600px){
+    header{
+        padding-top:80px;
+    }
+
+    header h1{
+        font-size:1.6rem;
+    }
+
+    main{
+        padding:10px 12px 40px;
+    }
+
+    .member-box{
+        padding:18px 12px;
+    }
+
+    .grid-siswa{
+        grid-template-columns:repeat(3,1fr);
+        gap:12px 6px;
+    }
+
+    .foto-wrapper,
+    .foto-lingkaran{
+        width:65px;
+        height:65px;
+    }
+
+    .nama-siswa{
+        font-size:.65rem;
+    }
+
+    .stats{
+        gap:10px;
+    }
+
+    .stat-card{
+        padding:15px 8px;
+    }
+}
+
+@media(max-width:380px){
+    .grid-siswa{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+</style>
 </head>
+
 <body>
-      <canvas id="particleCanvas"></canvas>
 
-    <button class="menu-toggle" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></button>
+<canvas id="particleCanvas"></canvas>
 
-    <nav class="sidebar" id="sidebar">
-        <ul>
-            <li><a href="struktur.html">STRUKTUR</a></li>
-            <li><a href="media_sosial.html">MEDIA SOSIAL</a></li>
-            <li><a href="cerita.html">MOMEN FOTO BERSAMA</a></li>
-            <li class="active"><a href="siswa.html">DATA MEMBER</a></li>
-        </ul>
-    </nav>
+<button class="menu-toggle" onclick="toggleMenu()">
+    <i class="fa-solid fa-bars"></i>
+</button>
 
-    <header>
-        <h1>XI TJKT 2</h1>
-        <small>class program</small>
-    </header>
+<nav class="sidebar" id="sidebar">
 
-    <main>
-        <section>
-            <h3><mark>Daftar Siswa & Siswi</mark></h3>
-            
-            <div class="grid-siswa">
-                <div class="card-siswa"><img src="https://cdn.phototourl.com/free/2026-09-13-f9b4e0d2-7085-4335-ab3e-7acff4127170.jpg" alt="Siswa 1" class="foto-lingkaran"><span class="nama-siswa">Adli</span></div>
-                <div class="card-siswa"><img src="https://cdn.phototourl.com/free/2026-09-13-918161d6-7d89-4cf1-b843-fb3147dabef4.jpg" alt="Siswa 2" class="foto-lingkaran"><span class="nama-siswa">Agung L</span></div>
-                <div class="card-siswa"><img src="https://cdn.phototourl.com/free/2026-09-13-0a5db809-0b73-4f3f-99b6-3061b462cbba.jpg" alt="Siswa 3" class="foto-lingkaran"><span class="nama-siswa">Agung P</span></div>
-                <div class="card-siswa"><img src="https://cdn.phototourl.com/free/2026-09-13-907d755d-227c-481b-bdeb-c3d05410ec99.jpg" alt="Siswa 4" class="foto-lingkaran"><span class="nama-siswa">Aryo</span></div>
-                <div class="card-siswa"><img src="https://cdn.phototourl.com/free/2026-09-13-601a14ec-3ce2-4df0-b8b2-a0e9a362e632.jpg" alt="Siswa 5" class="foto-lingkaran"><span class="nama-siswa">Almira</span></div>
-                <div class="card-siswa"><img src="https://cdn.phototourl.com/free/2026-09-13-2a3124f0-fd2f-4f0d-af36-6777840b3d74.jpg" alt="Siswa 6" class="foto-lingkaran"><span class="nama-siswa">Asyan</span></div>
-                <div class="card-siswa"><img src="https://cdn.phototourl.com/free/2026-09-13-458d2bb3-cd42-44e6-ba5e-d59bbdf4805f.jpg" alt="Siswa 7" class="foto-lingkaran"><span class="nama-siswa">Azka</span></div>
-                <div class="card-siswa"><img src="https://cdn.phototourl.com/free/2026-09-13-1d9f3478-edeb-4425-9454-a6cc431d06de.jpg" alt="Siswa 8" class="foto-lingkaran"><span class="nama-siswa">bannatun</span></div>
-                <div class="card-siswa"><img src="https://cdn.phototourl.com/free/2026-09-13-8a965989-7a6e-4fbf-adbd-bf10edbaeda8.jpg" alt="Siswa 9" class="foto-lingkaran"><span class="nama-siswa">Dani</span></div>
-                <div class="card-siswa"><img src="https://cdn.phototourl.com/free/2026-09-13-91e70c52-5e91-466d-b61c-bdfbd3af1f32.jpg" alt="Siswa 10" class="foto-lingkaran"><span class="nama-siswa">Destia</span></div>
-                <div class="card-siswa"><img src="https://cdn.phototourl.com/free/2026-09-13-79fc6422-4b8c-417c-a316-a9ed993e01a6.jpg" alt="Siswa 11" class="foto-lingkaran"><span class="nama-siswa">Diki</span></div>
-                <div class="card-siswa"><img src="https://cdn.phototourl.com/free/2026-09-13-7f27fc7c-0444-429d-9b3f-988f1fca1508.jpg" alt="Siswa 12" class="foto-lingkaran"><span class="nama-siswa">Dimas</span></div>
-                <div class="card-siswa"><img src="https://cdn.phototourl.com/free/2026-09-13-4ef42551-8354-4179-a934-6e1e802f0889.jpg" alt="Siswa 13" class="foto-lingkaran"><span class="nama-siswa">Dinda</span></div>
-                <div class="card-siswa"><img src="https://cdn.phototourl.com/free/2026-09-13-8d7cf307-12a9-4485-8087-b2395c72b131.jpg" alt="Siswa 14" class="foto-lingkaran"><span class="nama-siswa">Diyana</span></div>
-                <div class="card-siswa"><img src="https://cdn.phototourl.com/free/2026-09-13-2eac7935-423d-4b8d-a3ad-5a141e69a598.jpg" alt="Siswa 15" class="foto-lingkaran"><span class="nama-siswa">Doni</span></div>
-                <div class="card-siswa"><img src="https://cdn.phototourl.com/free/2026-09-13-69245f2c-0ac2-42be-aefc-08f1fec496a5.jpg" alt="Siswa 16" class="foto-lingkaran"><span class="nama-siswa">Durrotun</span></div>
-                <div class="card-siswa"><img src="https://cdn.phototourl.com/free/2026-09-13-6f2f82c4-7974-491f-a8d8-4f4151794c7f.jpg" alt="Siswa 17" class="foto-lingkaran"><span class="nama-siswa">Husnul</span></div>
-                <div class="card-siswa"><img src="https://cdn.phototourl.com/free/2026-09-13-a39c09ca-edf0-4915-9899-ddc4f235233b.jpg" alt="Siswa 18" class="foto-lingkaran"><span class="nama-siswa">Keysa</span></div>
-                <div class="card-siswa"><img src="https://cdn.phototourl.com/free/2026-09-13-2a28eb5c-0e12-4871-9465-27734e7b3908.jpg" alt="Siswa 19" class="foto-lingkaran"><span class="nama-siswa">Khoerul</span></div>
-                <div class="card-siswa"><img src="https://cdn.phototourl.com/free/2026-09-13-61da39c4-d567-4498-8c08-32521cfa6d0e.jpg" alt="Siswa 20" class="foto-lingkaran"><span class="nama-siswa">Marchel</span></div>
-                <div class="card-siswa"><img src="https://cdn.phototourl.com/free/2026-09-13-eb690be7-1b3a-4554-9106-447cab24eb3d.jpg" alt="Siswa 21" class="foto-lingkaran"><span class="nama-siswa">Meysa</span></div>
-                <div class="card-siswa"><img src="https://cdn.phototourl.com/free/2026-09-13-302c8c29-3930-4e40-a87a-77d307064b05.jpg" alt="Siswa 22" class="foto-lingkaran"><span class="nama-siswa">Reyfan</span></div>
-                <div class="card-siswa"><img src="https://cdn.phototourl.com/free/2026-09-13-217aed39-0561-45be-99b1-d9246e5bcfff.jpg" alt="Siswa 23" class="foto-lingkaran"><span class="nama-siswa">Aurel</span></div>
-                <div class="card-siswa"><img src="https://cdn.phototourl.com/free/2026-09-13-cd530023-4d52-46a5-b77f-2c5b3fdd7fd2.jpg" alt="Siswa 24" class="foto-lingkaran"><span class="nama-siswa">Radit</span></div>
-                <div class="card-siswa"><img src="https://cdn.phototourl.com/free/2026-09-13-738916e7-36cf-4932-b2d3-c0c6f7ddc699.jpg" alt="Siswa 25" class="foto-lingkaran"><span class="nama-siswa">Rafa</span></div>
-                <div class="card-siswa"><img src="https://cdn.phototourl.com/free/2026-09-13-d93983ad-3f02-455d-8b78-db800ebf639f.jpg" alt="Siswa 26" class="foto-lingkaran"><span class="nama-siswa">Silfi</span></div>
-                <div class="card-siswa"><img src="https://cdn.phototourl.com/free/2026-09-13-f32dd037-40fb-487e-8fe7-30922f811c6f.jpg" alt="Siswa 27" class="foto-lingkaran"><span class="nama-siswa">Wendi</span></div>
+    <div class="sidebar-title">
+        <i class="fa-solid fa-network-wired"></i>
+        XI TJKT 2
+    </div>
+
+    <ul>
+
+        <li>
+            <a href="struktur.html">
+                <i class="fa-solid fa-sitemap"></i>
+                STRUKTUR
+            </a>
+        </li>
+
+        <li>
+            <a href="media_sosial.html">
+                <i class="fa-solid fa-share-nodes"></i>
+                MEDIA SOSIAL
+            </a>
+        </li>
+
+        <li>
+            <a href="cerita.html">
+                <i class="fa-solid fa-images"></i>
+                MOMEN FOTO BERSAMA
+            </a>
+        </li>
+
+        <li class="active">
+            <a href="siswa.html">
+                <i class="fa-solid fa-users"></i>
+                DATA MEMBER
+            </a>
+        </li>
+
+        <li>
+            <a href="jadwal.html">
+                <i class="fa-solid fa-calendar-days"></i>
+                JADWAL
+            </a>
+        </li>
+
+        <li>
+            <a href="tugas.html">
+                <i class="fa-solid fa-book"></i>
+                TUGAS
+            </a>
+        </li>
+
+        <li>
+            <a href="pengumuman.html">
+                <i class="fa-solid fa-bullhorn"></i>
+                PENGUMUMAN
+            </a>
+        </li>
+
+    </ul>
+
+</nav>
+
+<header>
+
+    <div class="logo">
+        CLASS PROGRAM
+    </div>
+
+    <h1>XI TJKT 2</h1>
+
+    <p>Data Member Kelas</p>
+
+    <div class="clock" id="clock">
+        00:00:00
+    </div>
+
+</header>
+
+<main>
+
+    <div class="stats">
+
+        <div class="stat-card">
+            <i class="fa-solid fa-users"></i>
+            <strong>27</strong>
+            <span>Anggota Kelas</span>
+        </div>
+
+        <div class="stat-card">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <strong>XI</strong>
+            <span>Tingkat Kelas</span>
+        </div>
+
+    </div>
+
+    <section class="member-box">
+
+        <div class="section-title">
+            <span>
+                <i class="fa-solid fa-user-group"></i>
+                Daftar Siswa & Siswi
+            </span>
+        </div>
+
+        <div class="tools">
+
+            <button class="tool-btn" onclick="sortNames()">
+                <i class="fa-solid fa-arrow-down-a-z"></i>
+                Urutkan Nama
+            </button>
+
+            <button class="tool-btn" onclick="resetSearch()">
+                <i class="fa-solid fa-rotate-left"></i>
+                Reset
+            </button>
+
+        </div>
+
+        <div class="search-box">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Cari nama siswa..."
+                onkeyup="searchStudent()"
+            >
+
+        </div>
+
+        <div class="grid-siswa" id="studentGrid">
+
+            <div class="card-siswa">
+                <div class="foto-wrapper">
+                    <img src="https://cdn.phototourl.com/free/2026-09-13-f9b4e0d2-7085-4335-ab3e-7acff4127170.jpg" class="foto-lingkaran" alt="Adli">
+                </div>
+                <span class="nama-siswa">Adli</span>
             </div>
-        </section>
-    </main>
 
-    <footer>
-        <small>&copy; Adli Yanuar Firmansyah.</small>
-    </footer>
+            <div class="card-siswa">
+                <div class="foto-wrapper">
+                    <img src="https://cdn.phototourl.com/free/2026-09-13-918161d6-7d89-4cf1-b843-fb3147dabef4.jpg" class="foto-lingkaran" alt="Agung L">
+                </div>
+                <span class="nama-siswa">Agung L</span>
+            </div>
 
-    <script>
-        function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
-    </script>
+            <div class="card-siswa">
+                <div class="foto-wrapper">
+                    <img src="https://cdn.phototourl.com/free/2026-09-13-0a5db809-0b73-4f3f-99b6-3061b462cbba.jpg" class="foto-lingkaran" alt="Agung P">
+                </div>
+                <span class="nama-siswa">Agung P</span>
+            </div>
 
-      <script>
-        // Skrip Animasi Partikel Bintang / Titik Cahaya Bergerak
-        const canvas = document.getElementById('particleCanvas');
-        const ctx = canvas.getContext('2d');
+            <div class="card-siswa">
+                <div class="foto-wrapper">
+                    <img src="https://cdn.phototourl.com/free/2026-09-13-907d755d-227c-481b-bdeb-c3d05410ec99.jpg" class="foto-lingkaran" alt="Aryo">
+                </div>
+                <span class="nama-siswa">Aryo</span>
+            </div>
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            <div class="card-siswa">
+                <div class="foto-wrapper">
+                    <img src="https://cdn.phototourl.com/free/2026-09-13-601a14ec-3ce2-4df0-b8b2-a0e9a362e632.jpg" class="foto-lingkaran" alt="Almira">
+                </div>
+                <span class="nama-siswa">Almira</span>
+            </div>
+
+            <div class="card-siswa">
+                <div class="foto-wrapper">
+                    <img src="https://cdn.phototourl.com/free/2026-09-13-2a3124f0-fd2f-4f0d-af36-6777840b3d74.jpg" class="foto-lingkaran" alt="Asyan">
+                </div>
+                <span class="nama-siswa">Asyan</span>
+            </div>
+
+            <div class="card-siswa">
+                <div class="foto-wrapper">
+                    <img src="https://cdn.phototourl.com/free/2026-09-13-458d2bb3-cd42-44e6-ba5e-d59bbdf4805f.jpg" class="foto-lingkaran" alt="Azka">
+                </div>
+                <span class="nama-siswa">Azka</span>
+            </div>
+
+            <div class="card-siswa">
+                <div class="foto-wrapper">
+                    <img src="https://cdn.phototourl.com/free/2026-09-13-1d9f3478-edeb-4425-9454-a6cc431d06de.jpg" class="foto-lingkaran" alt="Bannatun">
+                </div>
+                <span class="nama-siswa">Bannatun</span>
+            </div>
+
+            <div class="card-siswa">
+                <div class="foto-wrapper">
+                    <img src="https://cdn.phototourl.com/free/2026-09-13-8a965989-7a6e-4fbf-adbd-bf10edbaeda8.jpg" class="foto-lingkaran" alt="Dani">
+                </div>
+                <span class="nama-siswa">Dani</span>
+            </div>
+
+            <div class="card-siswa">
+                <div class="foto-wrapper">
+                    <img src="https://cdn.phototourl.com/free/2026-09-13-91e70c52-5e91-466d-b61c-bdfbd3af1f32.jpg" class="foto-lingkaran" alt="Destia">
+                </div>
+                <span class="nama-siswa">Destia</span>
+            </div>
+
+            <div class="card-siswa">
+                <div class="foto-wrapper">
+                    <img src="https://cdn.phototourl.com/free/2026-09-13-79fc6422-4b8c-417c-a316-a9ed993e01a6.jpg" class="foto-lingkaran" alt="Diki">
+                </div>
+                <span class="nama-siswa">Diki</span>
+            </div>
+
+            <div class="card-siswa">
+                <div class="foto-wrapper">
+                    <img src="https://cdn.phototourl.com/free/2026-09-13-7f27fc7c-0444-429d-9b3f-988f1fca1508.jpg" class="foto-lingkaran" alt="Dimas">
+                </div>
+                <span class="nama-siswa">Dimas</span>
+            </div>
+
+            <div class="card-siswa">
+                <div class="foto-wrapper">
+                    <img src="https://cdn.phototourl.com/free/2026-09-13-4ef42551-8354-4179-a934-6e1e802f0889.jpg" class="foto-lingkaran" alt="Dinda">
+                </div>
+                <span class="nama-siswa">Dinda</span>
+            </div>
+
+            <div class="card-siswa">
+                <div class="foto-wrapper">
+                    <img src="https://cdn.phototourl.com/free/2026-09-13-8d7cf307-12a9-4485-8087-b2395c72b131.jpg" class="foto-lingkaran" alt="Diyana">
+                </div>
+                <span class="nama-siswa">Diyana</span>
+            </div>
+
+            <div class="card-siswa">
+                <div class="foto-wrapper">
+                    <img src="https://cdn.phototourl.com/free/2026-09-13-2eac7935-423d-4b8d-a3ad-5a141e69a598.jpg" class="foto-lingkaran" alt="Doni">
+                </div>
+                <span class="nama-siswa">Doni</span>
+            </div>
+
+            <div class="card-siswa">
+                <div class="foto-wrapper">
+                    <img src="https://cdn.phototourl.com/free/2026-09-13-69245f2c-0ac2-42be-aefc-08f1fec496a5.jpg" class="foto-lingkaran" alt="Durrotun">
+                </div>
+                <span class="nama-siswa">Durrotun</span>
+            </div>
+
+            <div class="card-siswa">
+                <div class="foto-wrapper">
+                    <img src="https://cdn.phototourl.com/free/2026-09-13-6f2f82c4-7974-491f-a8d8-4f4151794c7f.jpg" class="foto-lingkaran" alt="Husnul">
+                </div>
+                <span class="nama-siswa">Husnul</span>
+            </div>
+
+            <div class="card-siswa">
+                <div class="foto-wrapper">
+                    <img src="https://cdn.phototourl.com/free/2026-09-13-a39c09ca-edf0-4915-9899-ddc4f235233b.jpg" class="foto-lingkaran" alt="Keysa">
+                </div>
+                <span class="nama-siswa">Keysa</span>
+            </div>
+
+            <div class="card-siswa">
+                <div class="foto-wrapper">
+                    <img src="https://cdn.phototourl.com/free/2026-09-13-2a28eb5c-0e12-4871-9465-27734e7b3908.jpg" class="foto-lingkaran" alt="Khoerul">
+                </div>
+                <span class="nama-siswa">Khoerul</span>
+            </div>
+
+            <div class="card-siswa">
+                <div class="foto-wrapper">
+                    <img src="https://cdn.phototourl.com/free/2026-09-13-61da39c4-d567-4498-8c08-32521cfa6d0e.jpg" class="foto-lingkaran" alt="Marchel">
+                </div>
+                <span class="nama-siswa">Marchel</span>
+            </div>
+
+            <div class="card-siswa">
+                <div class="foto-wrapper">
+                    <img src="https://cdn.phototourl.com/free/2026-09-13-eb690be7-1b3a-4554-9106-447cab24eb3d.jpg" class="foto-lingkaran" alt="Meysa">
+                </div>
+                <span class="nama-siswa">Meysa</span>
+            </div>
+
+            <div class="card-siswa">
+                <div class="foto-wrapper">
+                    <img src="https://cdn.phototourl.com/free/2026-09-13-302c8c29-3930-4e40-a87a-77d307064b05.jpg" class="foto-lingkaran" alt="Reyfan">
+                </div>
+                <span class="nama-siswa">Reyfan</span>
+            </div>
+
+            <div class="card-siswa">
+                <div class="foto-wrapper">
+                    <img src="https://cdn.phototourl.com/free/2026-09-13-217aed39-0561-45be-99b1-d9246e5bcfff.jpg" class="foto-lingkaran" alt="Aurel">
+                </div>
+                <span class="nama-siswa">Aurel</span>
+            </div>
+
+            <div class="card-siswa">
+                <div class="foto-wrapper">
+                    <img src="https://cdn.phototourl.com/free/2026-09-13-cd530023-4d52-46a5-b77f-2c5b3fdd7fd2.jpg" class="foto-lingkaran" alt="Radit">
+                </div>
+                <span class="nama-siswa">Radit</span>
+            </div>
+
+            <div class="card-siswa">
+                <div class="foto-wrapper">
+                    <img src="https://cdn.phototourl.com/free/2026-09-13-738916e7-36cf-4932-b2d3-c0c6f7ddc699.jpg" class="foto-lingkaran" alt="Rafa">
+                </div>
+                <span class="nama-siswa">Rafa</span>
+            </div>
+
+            <div class="card-siswa">
+                <div class="foto-wrapper">
+                    <img src="https://cdn.phototourl.com/free/2026-09-13-d93983ad-3f02-455d-8b78-db800ebf639f.jpg" class="foto-lingkaran" alt="Silfi">
+                </div>
+                <span class="nama-siswa">Silfi</span>
+            </div>
+
+            <div class="card-siswa">
+                <div class="foto-wrapper">
+                    <img src="https://cdn.phototourl.com/free/2026-09-13-f32dd037-40fb-487e-8fe7-30922f811c6f.jpg" class="foto-lingkaran" alt="Wendi">
+                </div>
+                <span class="nama-siswa">Wendi</span>
+            </div>
+
+        </div>
+
+        <div class="empty" id="empty">
+            <i class="fa-solid fa-user-slash"></i>
+            <br><br>
+            Nama siswa tidak ditemukan.
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+    <small>&copy; Adli Yanuar Firmansyah.</small>
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+
+    <button class="close-lightbox" onclick="closeLightbox()">
+        <i class="fa-solid fa-xmark"></i>
+    </button>
+
+    <img id="lightboxImg" src="" alt="Foto siswa">
+
+</div>
+
+<button id="topBtn" onclick="scrollTopPage()">
+    <i class="fa-solid fa-arrow-up"></i>
+</button>
+
+<script>
+
+/* SIDEBAR */
+function toggleMenu(){
+    document.getElementById("sidebar").classList.toggle("active");
+}
+
+/* CLOCK */
+function updateClock(){
+
+    const now = new Date();
+
+    const time =
+        String(now.getHours()).padStart(2,"0") + ":" +
+        String(now.getMinutes()).padStart(2,"0") + ":" +
+        String(now.getSeconds()).padStart(2,"0");
+
+    document.getElementById("clock").textContent = time;
+}
+
+setInterval(updateClock,1000);
+updateClock();
+
+
+/* SEARCH */
+function searchStudent(){
+
+    const input =
+        document.getElementById("searchInput")
+        .value
+        .toLowerCase();
+
+    const cards =
+        document.querySelectorAll(".card-siswa");
+
+    let found = 0;
+
+    cards.forEach(card => {
+
+        const name =
+            card.querySelector(".nama-siswa")
+            .textContent
+            .toLowerCase();
+
+        if(name.includes(input)){
+
+            card.style.display = "";
+
+            found++;
+
+        }else{
+
+            card.style.display = "none";
+
         }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
 
-        const particlesArray = [];
-        const numberOfParticles = 40;
+    });
 
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 1;
-                this.speedX = (Math.random() - 0.5) * 0.4;
-                this.speedY = Math.random() * 0.7 + 0.2;
-                this.color = Math.random() > 0.5 ? 'rgba(0, 255, 255, 0.7)' : 'rgba(43, 43, 246, 0.7)';
-            }
-            update() {
-                this.y += this.speedY;
-                this.x += this.speedX;
-                if (this.y > canvas.height) {
-                    this.y = 0;
-                    this.x = Math.random() * canvas.width;
-                }
-            }
-            draw() {
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
+    document.getElementById("empty").style.display =
+        found === 0 ? "block" : "none";
+}
+
+
+/* RESET SEARCH */
+function resetSearch(){
+
+    document.getElementById("searchInput").value = "";
+
+    document.querySelectorAll(".card-siswa")
+    .forEach(card => {
+        card.style.display = "";
+    });
+
+    document.getElementById("empty").style.display = "none";
+}
+
+
+/* SORT */
+function sortNames(){
+
+    const grid =
+        document.getElementById("studentGrid");
+
+    const cards =
+        Array.from(grid.querySelectorAll(".card-siswa"));
+
+    cards.sort((a,b) => {
+
+        const nameA =
+            a.querySelector(".nama-siswa")
+            .textContent
+            .trim();
+
+        const nameB =
+            b.querySelector(".nama-siswa")
+            .textContent
+            .trim();
+
+        return nameA.localeCompare(nameB,"id");
+
+    });
+
+    cards.forEach(card => grid.appendChild(card));
+
+    resetSearch();
+}
+
+
+/* LIGHTBOX */
+const lightbox =
+    document.getElementById("lightbox");
+
+const lightboxImg =
+    document.getElementById("lightboxImg");
+
+document.querySelectorAll(".foto-lingkaran")
+.forEach(img => {
+
+    img.addEventListener("click",function(){
+
+        lightboxImg.src = this.src;
+
+        lightbox.classList.add("show");
+
+    });
+
+});
+
+
+function closeLightbox(){
+
+    lightbox.classList.remove("show");
+
+    lightboxImg.src = "";
+
+}
+
+
+lightbox.addEventListener("click",function(e){
+
+    if(e.target === lightbox){
+        closeLightbox();
+    }
+
+});
+
+
+document.addEventListener("keydown",function(e){
+
+    if(e.key === "Escape"){
+        closeLightbox();
+    }
+
+});
+
+
+/* BACK TO TOP */
+window.addEventListener("scroll",function(){
+
+    const btn =
+        document.getElementById("topBtn");
+
+    btn.style.display =
+        window.scrollY > 300 ? "block" : "none";
+
+});
+
+
+function scrollTopPage(){
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* PARTICLES */
+const canvas =
+    document.getElementById("particleCanvas");
+
+const ctx =
+    canvas.getContext("2d");
+
+let particles = [];
+
+function resizeCanvas(){
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+}
+
+window.addEventListener("resize",resizeCanvas);
+
+resizeCanvas();
+
+
+class Particle{
+
+    constructor(){
+
+        this.x =
+            Math.random() * canvas.width;
+
+        this.y =
+            Math.random() * canvas.height;
+
+        this.size =
+            Math.random() * 2 + .5;
+
+        this.speedX =
+            (Math.random() - .5) * .4;
+
+        this.speedY =
+            Math.random() * .6 + .1;
+
+        this.opacity =
+            Math.random() * .6 + .2;
+
+    }
+
+    update(){
+
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        if(this.y > canvas.height){
+
+            this.y = 0;
+            this.x = Math.random() * canvas.width;
+
         }
 
-        for (let i = 0; i < numberOfParticles; i++) {
-            particlesArray.push(new Particle());
+        if(this.x > canvas.width){
+            this.x = 0;
         }
 
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particlesArray.forEach(particle => {
-                particle.update();
-                particle.draw();
-            });
-            requestAnimationFrame(animateParticles);
+        if(this.x < 0){
+            this.x = canvas.width;
         }
 
-        animateParticles();
-    </script>
+    }
+
+    draw(){
+
+        ctx.beginPath();
+
+        ctx.arc(
+            this.x,
+            this.y,
+            this.size,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fillStyle =
+            `rgba(0,234,255,${this.opacity})`;
+
+        ctx.fill();
+
+    }
+
+}
+
+
+for(let i=0;i<45;i++){
+
+    particles.push(new Particle());
+
+}
+
+
+function animateParticles(){
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    particles.forEach(particle => {
+
+        particle.update();
+        particle.draw();
+
+    });
+
+    requestAnimationFrame(animateParticles);
+
+}
+
+animateParticles();
+
+</script>
 
 </body>
 </html>

@@ -1,290 +1,440 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>about XI TJKT 2</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Struktur - XI TJKT 2</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-        body {
-            font-family: monospace;
-            background: linear-gradient(135deg, #1a1a40, #0f0c29);
-            color: #fff;
-            min-height: 100vh;
-        }
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
 
-        /* Tombol Garis Tiga (Hamburger Menu) */
-        .menu-toggle {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgb(30, 44, 237);
-            color: white;
-            padding: 10px 14px;
-            border-radius: 10px;
-            cursor: pointer;
-            z-index: 1000;
-            font-size: 1.2rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
+body{
+    font-family:monospace;
+    background:linear-gradient(135deg,#1a1a40,#0f0c29);
+    color:#fff;
+    min-height:100vh;
+    overflow-x:hidden;
+}
 
-        .menu-toggle:hover {
-            background: #2b2bf6;
-        }
+#particleCanvas{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    z-index:-1;
+    pointer-events:none;
+}
 
-        /* Menu Navigasi Samping (Sidebar) */
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: -250px;
-            width: 250px;
-            height: 100%;
-            background: rgba(15, 12, 41, 0.95);
-            backdrop-filter: blur(15px);
-            border-right: 1px solid cyan;
-            display: flex;
-            flex-direction: column;
-            padding-top: 80px;
-            transition: 0.3s ease;
-            z-index: 999;
-            box-shadow: 5px 0 20px rgba(0, 0, 0, 0.5);
-        }
+.menu-toggle{
+    position:fixed;
+    top:18px;
+    left:18px;
+    width:46px;
+    height:46px;
+    border:1px solid #00eaff;
+    border-radius:12px;
+    background:rgba(0,0,0,.3);
+    color:white;
+    cursor:pointer;
+    z-index:1001;
+    font-size:20px;
+}
 
-        .sidebar.active {
-            left: 0;
-        }
+.sidebar{
+    position:fixed;
+    top:0;
+    left:-270px;
+    width:270px;
+    height:100vh;
+    padding:80px 20px 20px;
+    background:rgba(10,10,35,.95);
+    backdrop-filter:blur(15px);
+    border-right:1px solid cyan;
+    z-index:1000;
+    transition:.3s;
+}
 
-        .sidebar ul {
-            list-style: none;
-            padding: 0 20px;
-        }
+.sidebar.active{left:0}
 
-        .sidebar li {
-            margin-bottom: 15px;
-            text-align: left;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgb(30, 44, 237);
-            border-radius: 10px;
-            padding: 10px 15px;
-            transition: 0.2s;
-        }
+.sidebar-title{
+    text-align:center;
+    color:#00eaff;
+    margin-bottom:25px;
+}
 
-        .sidebar li:hover, .sidebar li.active {
-            background: linear-gradient(135deg, #2b2bf6, #1a1a40);
-            border-color: cyan;
-        }
+.sidebar ul{list-style:none}
 
-        .sidebar a {
-            text-decoration: none;
-            color: white;
-            display: block;
-            font-size: 1rem;
-        }
+.sidebar li{
+    margin-bottom:12px;
+    border:1px solid #2b2bf6;
+    border-radius:12px;
+    overflow:hidden;
+}
 
-        main {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            width: 100%;
-            padding-top: 40px;
-        }
+.sidebar li:hover,
+.sidebar li.active{
+    background:linear-gradient(135deg,#2b2bf6,#17173e);
+    border-color:#00eaff;
+}
 
-        header {
-            text-align: center;
-            padding-top: 25px;
-            color: white;
-        }
+.sidebar a{
+    display:flex;
+    gap:12px;
+    padding:13px;
+    color:white;
+    text-decoration:none;
+}
 
-        section {
-            border: 1px solid cyan;
-            padding: 30px;
-            border-radius: 15px;
-            margin-left: auto;
-            margin-right: auto;
-            margin-top: 25px;
-            width: 85%;
-            max-width: 450px;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(10px);
-        }
+header{
+    text-align:center;
+    padding:80px 20px 25px;
+}
 
-        mark {
-            background: linear-gradient(135deg, #2b2bf6, #1a1a40);
-            color: white;
-            padding: 3px 10px;
-            border-radius: 5px;
-        }
+header h1{
+    font-size:2rem;
+    text-shadow:0 0 15px #00eaff55;
+}
 
-        p {
-            margin-top: 8px;
-            color: #F5EEFF;
-        }
+header p{
+    color:#b9c0d0;
+    margin-top:8px;
+}
 
-        footer {
-            text-align: center;
-            color: white;
-            margin: 12px;
-            padding: 40px;
-        }
-              /* Efek latar belakang partikel bintang bergerak */
-        #particleCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            pointer-events: none;
-        }
+.clock{
+    display:inline-block;
+    margin-top:12px;
+    padding:8px 15px;
+    border:1px solid #00eaff66;
+    border-radius:20px;
+    color:#00eaff;
+}
 
-    </style>
+main{
+    max-width:1000px;
+    margin:auto;
+    padding:10px 20px 50px;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.stat{
+    padding:20px;
+    text-align:center;
+    border:1px solid #00eaff66;
+    border-radius:16px;
+    background:rgba(255,255,255,.05);
+    backdrop-filter:blur(10px);
+}
+
+.stat i{
+    color:#00eaff;
+    font-size:1.5rem;
+}
+
+.stat strong{
+    display:block;
+    font-size:1.5rem;
+    margin:5px;
+}
+
+.stat span{color:#b9c0d0;font-size:.75rem}
+
+.card{
+    margin-bottom:20px;
+    padding:25px;
+    border:1px solid #00eaff;
+    border-radius:20px;
+    background:rgba(255,255,255,.05);
+    backdrop-filter:blur(12px);
+    text-align:center;
+    box-shadow:0 10px 30px #0005;
+}
+
+.card h2{
+    color:#00eaff;
+    margin-bottom:20px;
+}
+
+.people{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:15px;
+}
+
+.person{
+    min-width:130px;
+    padding:15px;
+    border:1px solid #2b2bf6;
+    border-radius:14px;
+    background:#ffffff08;
+}
+
+.person i{
+    color:#00eaff;
+    margin-bottom:8px;
+}
+
+.person span{
+    display:block;
+    font-size:.8rem;
+}
+
+.wali{
+    color:#00eaff;
+    font-size:1rem;
+}
+
+.note{
+    color:#aeb6ca;
+    font-size:.75rem;
+    margin-top:15px;
+}
+
+footer{
+    text-align:center;
+    padding:35px 20px;
+    color:#aeb6ca;
+    font-size:.8rem;
+}
+
+@media(max-width:600px){
+    .stats{grid-template-columns:1fr}
+    main{padding:10px 12px 40px}
+    .card{padding:18px 12px}
+    .person{min-width:110px}
+}
+</style>
 </head>
+
 <body>
-      <canvas id="particleCanvas"></canvas>
 
-    <button class="menu-toggle" onclick="toggleMenu()">
-        <i class="fa-solid fa-bars"></i>
-    </button>
+<canvas id="particleCanvas"></canvas>
 
-    <nav class="sidebar" id="sidebar">
-        <ul>
-            <li class="active"><a href="struktur.html">STRUKTUR</a></li>
-            <li><a href="media_sosial.html">MEDIA SOSIAL</a></li>
-            <li><a href="cerita.html">MOMEN FOTO BERSAMA</a></li>
-            <li><a href="siswa.html">SISWA/SISWI</a></li>
-        </ul>
-    </nav>
+<button class="menu-toggle" onclick="toggleMenu()">
+<i class="fa-solid fa-bars"></i>
+</button>
 
-    <header>
-        <h1>XI TJKT 2</h1>
-        <small>class program</small>
-    </header>
+<nav class="sidebar" id="sidebar">
+<div class="sidebar-title">
+<i class="fa-solid fa-network-wired"></i> XI TJKT 2
+</div>
 
-    <main>
-        <section>
-            <h3><mark>WALI KELAS</mark></h3>
-            <p>Laili Munfarijah, s.pd</p>
-        </section>
+<ul>
+<li class="active">
+<a href="struktur.html">
+<i class="fa-solid fa-sitemap"></i> STRUKTUR
+</a>
+</li>
 
-        <section>
-            <h3><mark>KETUA & WAKIL KETUA KELAS</mark></h3>
-            <p>Wendi & Dani</p>
-        </section>
+<li>
+<a href="media_sosial.html">
+<i class="fa-solid fa-share-nodes"></i> MEDIA SOSIAL
+</a>
+</li>
 
-        <section>
-            <h3><mark>SEKERTARIS</mark></h3>
-            <p>Dinda</p>
-          <p>Destia</p>
-        </section>
+<li>
+<a href="cerita.html">
+<i class="fa-solid fa-images"></i> MOMEN FOTO BERSAMA
+</a>
+</li>
 
-        <section>
-            <h3><mark>BENDAHARA</mark></h3>
-            <p>Meysa</p>
-          <p>Almira</p>
-        </section>
+<li>
+<a href="siswa.html">
+<i class="fa-solid fa-users"></i> DATA MEMBER
+</a>
+</li>
+</ul>
+</nav>
 
-      <section>
-            <h3><mark>KEAMANAN</mark></h3>
-            <p>Adli</p>
-          <p>Revan</p>
-        <p>Erul</p>
-        <p>Aryo</p>
-        <p>Silfi</p>
-        <p>Khusnul</p>
-      </section>
+<header>
+<h1>XI TJKT 2</h1>
+<p>Class Program • Struktur Kelas</p>
+<div class="clock" id="clock">00:00:00</div>
+</header>
 
-      <section>
-            <h3><mark>KEAGAMAAN</mark></h3>
-            <p>Dimas</p>
-          <p>Dinda</p>
-        <p>Keysa</p>
-        <p>Destia</p>
-        <p>Durrotun</p>
-      </section>
+<main>
 
-      <section>
-            <h3><mark>ANNGOTA</mark></h3>
-            <p>Doni,Diki,Radit,Asyan,Rapa</p>
-          <p>Agung L,Agung P,Aska,Marchel</p>
-        <p>Aurel,Banatun,Diyana,</p>
-      </section>
-    </main>
+<div class="stats">
+<div class="stat">
+<i class="fa-solid fa-users"></i>
+<strong>27</strong>
+<span>Anggota Kelas</span>
+</div>
 
-    <footer>
-        <small>&copy; Adli Yanuar Firmansyah.</small>
-    </footer>
+<div class="stat">
+<i class="fa-solid fa-graduation-cap"></i>
+<strong>XI</strong>
+<span>Tingkat Kelas</span>
+</div>
+</div>
 
-    <script>
-        function toggleMenu() {
-            document.getElementById('sidebar').classList.toggle('active');
-        }
-    </script>
+<div class="card">
+<h2><i class="fa-solid fa-chalkboard-user"></i> Wali Kelas</h2>
+<div class="wali">Laili Munfarijah, S.Pd</div>
+</div>
 
-      <script>
-        // Skrip Animasi Partikel Bintang / Titik Cahaya Bergerak
-        const canvas = document.getElementById('particleCanvas');
-        const ctx = canvas.getContext('2d');
+<div class="card">
+<h2><i class="fa-solid fa-crown"></i> Ketua & Wakil</h2>
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+<div class="people">
+<div class="person">
+<i class="fa-solid fa-user-tie"></i>
+<span><b>Ketua</b></span>
+<span>Wendi</span>
+</div>
 
-        const particlesArray = [];
-        const numberOfParticles = 40;
+<div class="person">
+<i class="fa-solid fa-user-tie"></i>
+<span><b>Wakil Ketua</b></span>
+<span>Dani</span>
+</div>
+</div>
+</div>
 
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 1;
-                this.speedX = (Math.random() - 0.5) * 0.4;
-                this.speedY = Math.random() * 0.7 + 0.2;
-                this.color = Math.random() > 0.5 ? 'rgba(0, 255, 255, 0.7)' : 'rgba(43, 43, 246, 0.7)';
-            }
-            update() {
-                this.y += this.speedY;
-                this.x += this.speedX;
-                if (this.y > canvas.height) {
-                    this.y = 0;
-                    this.x = Math.random() * canvas.width;
-                }
-            }
-            draw() {
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
+<div class="card">
+<h2><i class="fa-solid fa-pen"></i> Sekretaris</h2>
 
-        for (let i = 0; i < numberOfParticles; i++) {
-            particlesArray.push(new Particle());
-        }
+<div class="people">
+<div class="person">Dinda</div>
+<div class="person">Destia</div>
+</div>
+</div>
 
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particlesArray.forEach(particle => {
-                particle.update();
-                particle.draw();
-            });
-            requestAnimationFrame(animateParticles);
-        }
+<div class="card">
+<h2><i class="fa-solid fa-wallet"></i> Bendahara</h2>
 
-        animateParticles();
-    </script>
+<div class="people">
+<div class="person">Meysa</div>
+<div class="person">Almira</div>
+</div>
+</div>
+
+<div class="card">
+<h2><i class="fa-solid fa-shield-halved"></i> Keamanan</h2>
+
+<div class="people">
+<div class="person">Adli</div>
+<div class="person">Revan</div>
+<div class="person">Erul</div>
+<div class="person">Aryo</div>
+<div class="person">Silfi</div>
+<div class="person">Khusnul</div>
+</div>
+</div>
+
+<div class="card">
+<h2><i class="fa-solid fa-mosque"></i> Keagamaan</h2>
+
+<div class="people">
+<div class="person">Dimas</div>
+<div class="person">Dinda</div>
+<div class="person">Keysa</div>
+<div class="person">Destia</div>
+<div class="person">Durrotun</div>
+</div>
+</div>
+
+<div class="card">
+<h2><i class="fa-solid fa-user-group"></i> Anggota</h2>
+
+<div class="people">
+<div class="person">Doni</div>
+<div class="person">Diki</div>
+<div class="person">Radit</div>
+<div class="person">Asyan</div>
+<div class="person">Rapa</div>
+<div class="person">Agung L</div>
+<div class="person">Agung P</div>
+<div class="person">Aska</div>
+<div class="person">Marchel</div>
+<div class="person">Aurel</div>
+<div class="person">Banatun</div>
+<div class="person">Diyana</div>
+</div>
+
+</div>
+
+</main>
+
+<footer>
+&copy; Adli Yanuar Firmansyah.
+</footer>
+
+<script>
+function toggleMenu(){
+document.getElementById("sidebar").classList.toggle("active");
+}
+
+function updateClock(){
+const now=new Date();
+document.getElementById("clock").textContent=
+String(now.getHours()).padStart(2,"0")+":"+
+String(now.getMinutes()).padStart(2,"0")+":"+
+String(now.getSeconds()).padStart(2,"0");
+}
+
+setInterval(updateClock,1000);
+updateClock();
+
+/* PARTIKEL */
+const canvas=document.getElementById("particleCanvas");
+const ctx=canvas.getContext("2d");
+let particles=[];
+
+function resize(){
+canvas.width=innerWidth;
+canvas.height=innerHeight;
+}
+
+resize();
+window.addEventListener("resize",resize);
+
+class Particle{
+constructor(){
+this.x=Math.random()*canvas.width;
+this.y=Math.random()*canvas.height;
+this.r=Math.random()*3+1;
+this.speed=(Math.random()*.6)+.2;
+}
+update(){
+this.y-=this.speed;
+if(this.y<-10){
+this.y=canvas.height+10;
+this.x=Math.random()*canvas.width;
+}
+}
+draw(){
+ctx.beginPath();
+ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+ctx.fillStyle="rgba(0,234,255,.65)";
+ctx.shadowBlur=10;
+ctx.shadowColor="#00eaff";
+ctx.fill();
+ctx.shadowBlur=0;
+}
+}
+
+for(let i=0;i<45;i++)particles.push(new Particle());
+
+function animate(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+particles.forEach(p=>{
+p.update();
+p.draw();
+});
+requestAnimationFrame(animate);
+}
+
+animate();
+</script>
 
 </body>
 </html>
+

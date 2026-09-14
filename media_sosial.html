@@ -1,143 +1,352 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>media sosial - XI TJKT 2</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: monospace; background: linear-gradient(135deg, #1a1a40, #0f0c29); color: #fff; min-height: 100vh; }
-        .menu-toggle { position: fixed; top: 20px; left: 20px; background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(10px); border: 1px solid rgb(30, 44, 237); color: white; padding: 10px 14px; border-radius: 10px; cursor: pointer; z-index: 1000; font-size: 1.2rem; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); }
-        .sidebar { position: fixed; top: 0; left: -250px; width: 250px; height: 100%; background: rgba(15, 12, 41, 0.95); backdrop-filter: blur(15px); border-right: 1px solid cyan; display: flex; flex-direction: column; padding-top: 80px; transition: 0.3s ease; z-index: 999; box-shadow: 5px 0 20px rgba(0, 0, 0, 0.5); }
-        .sidebar.active { left: 0; }
-        .sidebar ul { list-style: none; padding: 0 20px; }
-        .sidebar li { margin-bottom: 15px; text-align: left; background: rgba(255, 255, 255, 0.05); border: 1px solid rgb(30, 44, 237); border-radius: 10px; padding: 10px 15px; transition: 0.2s; }
-        .sidebar li:hover, .sidebar li.active { background: linear-gradient(135deg, #2b2bf6, #1a1a40); border-color: cyan; }
-        .sidebar a { text-decoration: none; color: white; display: block; font-size: 1rem; }
-        main { display: flex; justify-content: center; align-items: center; flex-direction: column; width: 100%; padding-top: 40px; }
-        header { text-align: center; padding-top: 25px; color: white; }
-        section { border: 1px solid cyan; padding: 25px; border-radius: 15px; margin-left: auto; margin-right: auto; margin-top: 25px; width: 85%; max-width: 450px; text-align: center; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); transition: 0.3s ease; }
-        section:hover { background-color: rgba(240, 16, 60, 0.1); transform: scale(1.02); }
-        section a { display: flex; align-items: center; justify-content: center; gap: 15px; font-size: 1.2rem; text-decoration: none; color: white; }
-        span { font-size: 28px; }
-        footer { text-align: center; color: white; margin: 12px; padding: 40px; }
-              /* Efek latar belakang partikel bintang bergerak */
-        #particleCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            pointer-events: none;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Media Sosial - XI TJKT 2</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    </style>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+font-family:monospace;
+background:linear-gradient(135deg,#1a1a40,#0f0c29);
+color:white;
+min-height:100vh;
+overflow-x:hidden;
+}
+
+#particleCanvas{
+position:fixed;
+inset:0;
+width:100%;
+height:100%;
+z-index:-1;
+pointer-events:none;
+}
+
+.menu-toggle{
+position:fixed;
+top:18px;
+left:18px;
+width:46px;
+height:46px;
+border:1px solid #00eaff;
+border-radius:12px;
+background:#0005;
+color:white;
+cursor:pointer;
+z-index:1001;
+font-size:20px;
+}
+
+.sidebar{
+position:fixed;
+top:0;
+left:-270px;
+width:270px;
+height:100vh;
+padding:80px 20px;
+background:#0a0a23f5;
+backdrop-filter:blur(15px);
+border-right:1px solid cyan;
+z-index:1000;
+transition:.3s;
+}
+
+.sidebar.active{left:0}
+
+.sidebar-title{
+text-align:center;
+color:#00eaff;
+margin-bottom:25px;
+}
+
+.sidebar ul{list-style:none}
+
+.sidebar li{
+margin-bottom:12px;
+border:1px solid #2b2bf6;
+border-radius:12px;
+overflow:hidden;
+}
+
+.sidebar li:hover,
+.sidebar li.active{
+background:linear-gradient(135deg,#2b2bf6,#17173e);
+border-color:#00eaff;
+}
+
+.sidebar a{
+display:flex;
+gap:12px;
+padding:13px;
+color:white;
+text-decoration:none;
+}
+
+header{
+text-align:center;
+padding:80px 20px 30px;
+}
+
+header h1{
+font-size:2rem;
+}
+
+header p{
+color:#aeb6ca;
+margin-top:8px;
+}
+
+.clock{
+display:inline-block;
+margin-top:12px;
+padding:8px 15px;
+border:1px solid #00eaff66;
+border-radius:20px;
+color:#00eaff;
+}
+
+main{
+max-width:850px;
+margin:auto;
+padding:10px 20px 60px;
+}
+
+.title{
+text-align:center;
+margin-bottom:25px;
+color:#00eaff;
+}
+
+.social-card{
+display:flex;
+align-items:center;
+gap:20px;
+padding:22px;
+margin-bottom:18px;
+border:1px solid #00eaff66;
+border-radius:18px;
+background:#ffffff08;
+backdrop-filter:blur(12px);
+transition:.3s;
+}
+
+.social-card:hover{
+transform:translateY(-5px);
+border-color:#00eaff;
+box-shadow:0 0 25px #00eaff22;
+}
+
+.social-icon{
+width:60px;
+height:60px;
+display:flex;
+align-items:center;
+justify-content:center;
+border:1px solid #00eaff;
+border-radius:15px;
+font-size:25px;
+color:#00eaff;
+}
+
+.social-card h2{
+font-size:1rem;
+margin-bottom:6px;
+}
+
+.social-card p{
+color:#aeb6ca;
+font-size:.75rem;
+margin-bottom:10px;
+}
+
+.social-card a{
+display:inline-block;
+padding:8px 13px;
+border-radius:9px;
+background:#2b2bf6;
+color:white;
+text-decoration:none;
+font-size:.75rem;
+}
+
+footer{
+text-align:center;
+padding:35px;
+color:#aeb6ca;
+font-size:.8rem;
+}
+
+@media(max-width:600px){
+.social-card{align-items:flex-start}
+main{padding:10px 12px 40px}
+}
+</style>
 </head>
+
 <body>
-      <canvas id="particleCanvas"></canvas>
 
-    <button class="menu-toggle" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></button>
+<canvas id="particleCanvas"></canvas>
 
-    <nav class="sidebar" id="sidebar">
-        <ul>
-            <li><a href="struktur.html">STRUKTUR</a></li>
-            <li class="active"><a href="media_sosial.html">MEDIA SOSIAL</a></li>
-            <li><a href="cerita.html">MOMEN FOTO BERSAMA</a></li>
-            <li><a href="siswa.html">DATA MEMBER</a></li>
-        </ul>
-    </nav>
+<button class="menu-toggle" onclick="toggleMenu()">
+<i class="fa-solid fa-bars"></i>
+</button>
 
-    <header>
-        <h1>XI TJKT 2</h1>
-        <small>class program</small>
-    </header>
+<nav class="sidebar" id="sidebar">
 
-    <main>
-        <section>
-            <a href="https://www.tiktok.com/@theclass_tekaje?_r=1&_t=ZS-99cIc0QcJWK" target="_blank">
-                <i class="fa-brands fa-tiktok"></i>
-                <span>TIKTOK</span>
-            </a>
-        </section>
-        <section>
-            <a href="https://chat.whatsapp.com/Jqk1FqyI16u1uu24r5zNPm" target="_blank">
-                <i class="fa-brands fa-whatsapp"></i>
-                <span>WHATSAPP</span>
-            </a>
-        </section>
-        <section>
-            <a href="https://www.instagram.com/mmoris.eleventjkttwo_?stkn=dnF6eWd2dTl5dTdz" target="_blank">
-                <i class="fa-brands fa-instagram"></i>
-                <span>INSTAGRAM</span>
-            </a>
-        </section>
-    </main>
+<div class="sidebar-title">
+<i class="fa-solid fa-network-wired"></i> XI TJKT 2
+</div>
 
-    <footer>
-        <small>&copy; Adli Yanuar Firmansyah.</small>
-    </footer>
+<ul>
 
-    <script>
-        function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
-    </script>
+<li>
+<a href="struktur.html">
+<i class="fa-solid fa-sitemap"></i> STRUKTUR
+</a>
+</li>
 
-      <script>
-        // Skrip Animasi Partikel Bintang / Titik Cahaya Bergerak
-        const canvas = document.getElementById('particleCanvas');
-        const ctx = canvas.getContext('2d');
+<li class="active">
+<a href="media_sosial.html">
+<i class="fa-solid fa-share-nodes"></i> MEDIA SOSIAL
+</a>
+</li>
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+<li>
+<a href="cerita.html">
+<i class="fa-solid fa-images"></i> MOMEN FOTO BERSAMA
+</a>
+</li>
 
-        const particlesArray = [];
-        const numberOfParticles = 40;
+<li>
+<a href="siswa.html">
+<i class="fa-solid fa-users"></i> DATA MEMBER
+</a>
+</li>
 
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 1;
-                this.speedX = (Math.random() - 0.5) * 0.4;
-                this.speedY = Math.random() * 0.7 + 0.2;
-                this.color = Math.random() > 0.5 ? 'rgba(0, 255, 255, 0.7)' : 'rgba(43, 43, 246, 0.7)';
-            }
-            update() {
-                this.y += this.speedY;
-                this.x += this.speedX;
-                if (this.y > canvas.height) {
-                    this.y = 0;
-                    this.x = Math.random() * canvas.width;
-                }
-            }
-            draw() {
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
+</ul>
+</nav>
 
-        for (let i = 0; i < numberOfParticles; i++) {
-            particlesArray.push(new Particle());
-        }
+<header>
+<h1>XI TJKT 2</h1>
+<p>Class Program • Media Sosial</p>
+<div class="clock" id="clock">00:00:00</div>
+</header>
 
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particlesArray.forEach(particle => {
-                particle.update();
-                particle.draw();
-            });
-            requestAnimationFrame(animateParticles);
-        }
+<main>
 
-        animateParticles();
-    </script>
+<h2 class="title">
+<i class="fa-solid fa-share-nodes"></i>
+Media Sosial Kelas
+</h2>
+
+<div class="social-card">
+<div class="social-icon">
+<i class="fa-brands fa-tiktok"></i>
+</div>
+<div>
+<h2>TikTok</h2>
+<p>Ikuti akun TikTok kelas XI TJKT 2.</p>
+<a href="https://www.tiktok.com/@theclass_tekaje?_r=1&_t=ZS-99cIc0QcJWK" target="_blank">
+Buka TikTok
+</a>
+</div>
+</div>
+
+<div class="social-card">
+<div class="social-icon">
+<i class="fa-brands fa-whatsapp"></i>
+</div>
+<div>
+<h2>WhatsApp Group</h2>
+<p>Gabung ke grup WhatsApp kelas.</p>
+<a href="https://chat.whatsapp.com/Jqk1FqyI16u1uu24r5zNPm" target="_blank">
+Buka WhatsApp
+</a>
+</div>
+</div>
+
+<div class="social-card">
+<div class="social-icon">
+<i class="fa-brands fa-instagram"></i>
+</div>
+<div>
+<h2>Instagram</h2>
+<p>Lihat Instagram kelas XI TJKT 2.</p>
+<a href="https://www.instagram.com/mmoris.eleventjkttwo_?stkn=dnF6eWd2dTl5dTdz" target="_blank">
+Buka Instagram
+</a>
+</div>
+</div>
+
+</main>
+
+<footer>
+&copy; Adli Yanuar Firmansyah.
+</footer>
+
+<script>
+function toggleMenu(){
+document.getElementById("sidebar").classList.toggle("active");
+}
+
+function updateClock(){
+const d=new Date();
+clock.textContent=
+String(d.getHours()).padStart(2,"0")+":"+
+String(d.getMinutes()).padStart(2,"0")+":"+
+String(d.getSeconds()).padStart(2,"0");
+}
+
+setInterval(updateClock,1000);
+updateClock();
+
+const canvas=document.getElementById("particleCanvas");
+const ctx=canvas.getContext("2d");
+let p=[];
+
+function resize(){
+canvas.width=innerWidth;
+canvas.height=innerHeight;
+}
+
+resize();
+onresize=resize;
+
+for(let i=0;i<45;i++){
+p.push({
+x:Math.random()*innerWidth,
+y:Math.random()*innerHeight,
+r:Math.random()*3+1,
+s:Math.random()*.6+.2
+});
+}
+
+function animate(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+p.forEach(o=>{
+o.y-=o.s;
+
+if(o.y<0){
+o.y=canvas.height;
+o.x=Math.random()*canvas.width;
+}
+
+ctx.beginPath();
+ctx.arc(o.x,o.y,o.r,0,Math.PI*2);
+ctx.fillStyle="rgba(0,234,255,.65)";
+ctx.fill();
+});
+
+requestAnimationFrame(animate);
+}
+
+animate();
+</script>
 
 </body>
 </html>

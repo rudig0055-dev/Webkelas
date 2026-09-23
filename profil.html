@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Profil Kelas - XI TJKT 2</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:monospace;
+    background:linear-gradient(135deg,#1a1a40,#0f0c29);
+    color:#fff;
+    min-height:100vh;
+    overflow-x:hidden;
+}
+
+#particleCanvas{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    z-index:-1;
+    pointer-events:none;
+}
+
+.menu-toggle{
+    position:fixed;
+    top:18px;
+    left:18px;
+    width:46px;
+    height:46px;
+    border:1px solid #00eaff;
+    border-radius:12px;
+    background:rgba(0,0,0,.3);
+    color:white;
+    cursor:pointer;
+    z-index:1001;
+    font-size:20px;
+}
+
+.sidebar{
+    position:fixed;
+    top:0;
+    left:-270px;
+    width:270px;
+    height:100vh;
+    padding:80px 20px 20px;
+    background:rgba(10,10,35,.95);
+    backdrop-filter:blur(15px);
+    border-right:1px solid cyan;
+    z-index:1000;
+    transition:.3s;
+}
+
+.sidebar.active{
+    left:0;
+}
+
+.sidebar-title{
+    text-align:center;
+    color:#00eaff;
+    margin-bottom:25px;
+}
+
+.sidebar ul{
+    list-style:none;
+}
+
+.sidebar li{
+    margin-bottom:12px;
+    border:1px solid #2b2bf6;
+    border-radius:12px;
+    overflow:hidden;
+}
+
+.sidebar li:hover,
+.sidebar li.active{
+    background:linear-gradient(135deg,#2b2bf6,#17173e);
+    border-color:#00eaff;
+}
+
+.sidebar a{
+    display:flex;
+    gap:12px;
+    padding:13px;
+    color:white;
+    text-decoration:none;
+}
+
+header{
+    text-align:center;
+    padding:80px 20px 25px;
+}
+
+header h1{
+    font-size:2rem;
+    text-shadow:0 0 15px #00eaff55;
+}
+
+header p{
+    color:#b9c0d0;
+    margin-top:8px;
+}
+
+.clock{
+    display:inline-block;
+    margin-top:12px;
+    padding:8px 15px;
+    border:1px solid #00eaff66;
+    border-radius:20px;
+    color:#00eaff;
+}
+
+main{
+    max-width:1000px;
+    margin:auto;
+    padding:10px 20px 50px;
+}
+
+/* HERO */
+
+.hero{
+    padding:35px 20px;
+    text-align:center;
+    border:1px solid #00eaff;
+    border-radius:22px;
+    background:rgba(255,255,255,.05);
+    backdrop-filter:blur(12px);
+    box-shadow:0 10px 30px #0005;
+    margin-bottom:20px;
+}
+
+.hero-icon{
+    width:90px;
+    height:90px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    border:2px solid #00eaff;
+    color:#00eaff;
+    font-size:40px;
+    box-shadow:0 0 25px #00eaff55;
+}
+
+.hero h2{
+    margin-top:20px;
+    color:#00eaff;
+    font-size:1.7rem;
+}
+
+.hero p{
+    color:#b9c0d0;
+    margin-top:10px;
+    line-height:1.7;
+}
+
+/* INFO */
+
+.info-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.info-card{
+    padding:22px;
+    border:1px solid #00eaff66;
+    border-radius:17px;
+    background:rgba(255,255,255,.05);
+    backdrop-filter:blur(10px);
+    text-align:center;
+    transition:.3s;
+}
+
+.info-card:hover{
+    transform:translateY(-4px);
+    border-color:#00eaff;
+    box-shadow:0 0 20px #00eaff22;
+}
+
+.info-card i{
+    color:#00eaff;
+    font-size:25px;
+    margin-bottom:12px;
+}
+
+.info-card h3{
+    font-size:1rem;
+    margin-bottom:7px;
+}
+
+.info-card p{
+    color:#b9c0d0;
+    font-size:.8rem;
+}
+
+/* CARD */
+
+.card{
+    margin-bottom:20px;
+    padding:25px;
+    border:1px solid #00eaff;
+    border-radius:20px;
+    background:rgba(255,255,255,.05);
+    backdrop-filter:blur(12px);
+    text-align:center;
+    box-shadow:0 10px 30px #0005;
+}
+
+.card h2{
+    color:#00eaff;
+    margin-bottom:18px;
+}
+
+.card p{
+    color:#b9c0d0;
+    line-height:1.8;
+    font-size:.85rem;
+}
+
+/* MOTTO */
+
+.motto{
+    font-size:1.2rem;
+    color:#fff;
+    padding:20px;
+    border-left:3px solid #00eaff;
+    border-right:3px solid #00eaff;
+    line-height:1.7;
+}
+
+/* VALUES */
+
+.values{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:12px;
+}
+
+.value{
+    padding:12px 17px;
+    border:1px solid #2b2bf6;
+    border-radius:12px;
+    color:#dfe7ff;
+    background:#ffffff08;
+}
+
+.value i{
+    color:#00eaff;
+    margin-right:7px;
+}
+
+/* FOOTER */
+
+footer{
+    text-align:center;
+    padding:35px 20px;
+    color:#aeb6ca;
+    font-size:.8rem;
+}
+
+/* MOBILE */
+
+@media(max-width:600px){
+
+    .info-grid{
+        grid-template-columns:1fr;
+    }
+
+    main{
+        padding:10px 12px 40px;
+    }
+
+    .hero{
+        padding:28px 15px;
+    }
+
+    .card{
+        padding:20px 14px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<canvas id="particleCanvas"></canvas>
+
+
+<!-- MENU -->
+
+<button class="menu-toggle" onclick="toggleMenu()">
+<i class="fa-solid fa-bars"></i>
+</button>
+
+
+<!-- SIDEBAR -->
+
+<nav class="sidebar" id="sidebar">
+
+<div class="sidebar-title">
+<i class="fa-solid fa-network-wired"></i>
+XI TJKT 2
+</div>
+
+<ul>
+
+<li class="active">
+<a href="profil.html">
+<i class="fa-solid fa-house"></i>
+PROFIL KELAS
+</a>
+</li>
+
+<li>
+<a href="struktur.html">
+<i class="fa-solid fa-sitemap"></i>
+STRUKTUR
+</a>
+</li>
+
+<li>
+<a href="media_sosial.html">
+<i class="fa-solid fa-share-nodes"></i>
+MEDIA SOSIAL
+</a>
+</li>
+
+<li>
+<a href="cerita.html">
+<i class="fa-solid fa-images"></i>
+MOMEN FOTO BERSAMA
+</a>
+</li>
+
+<li>
+<a href="siswa.html">
+<i class="fa-solid fa-users"></i>
+DATA MEMBER
+</a>
+</li>
+
+
+<li>
+              <a href="piket.html">
+                <i class="fa-solid fa-broom"></i>
+                JADWAL PIKET
+            </a>
+</li>
+  
+</ul>
+</nav>
+
+
+<!-- HEADER -->
+
+<header>
+
+<h1>PROFIL KELAS</h1>
+
+<p>XI TJKT 2 • Identitas Kelas</p>
+
+<div class="clock" id="clock">
+00:00:00
+</div>
+
+</header>
+
+
+<main>
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+<div class="hero-icon">
+<i class="fa-solid fa-network-wired"></i>
+</div>
+
+<h2>XI TJKT 2</h2>
+
+<p>
+Keluarga besar XI TJKT 2 yang penuh dengan
+kebersamaan, perjuangan, cerita, dan kenangan.
+</p>
+
+</section>
+
+
+<!-- INFO -->
+
+<div class="info-grid">
+
+<div class="info-card">
+
+<i class="fa-solid fa-school"></i>
+
+<h3>Jurusan</h3>
+
+<p>
+Teknik Jaringan Komputer dan Telekomunikasi
+</p>
+
+</div>
+
+
+<div class="info-card">
+
+<i class="fa-solid fa-layer-group"></i>
+
+<h3>Tingkat</h3>
+
+<p>Kelas XI</p>
+
+</div>
+
+</div>
+
+
+<!-- TENTANG -->
+
+<div class="card">
+
+<h2>
+<i class="fa-solid fa-circle-info"></i>
+Tentang Kelas
+</h2>
+
+<p>
+
+XI TJKT 2 merupakan salah satu kelas dari jurusan
+Teknik Jaringan Komputer dan Telekomunikasi.
+
+Di dalam kelas ini terdapat berbagai karakter,
+kemampuan, dan cerita yang berbeda-beda.
+
+Meskipun memiliki perbedaan, kami tetap menjadi
+satu keluarga yang saling membantu dan berbagi
+pengalaman selama menjalani masa sekolah.
+
+</p>
+
+</div>
+
+
+<!-- MOTTO -->
+
+<div class="card">
+
+<h2>
+<i class="fa-solid fa-quote-left"></i>
+Motto Kelas
+</h2>
+
+<div class="motto">
+
+"Berbeda karakter, satu tujuan.
+Bersama menciptakan cerita,
+bersama menciptakan kenangan."
+
+</div>
+
+</div>
+
+
+<!-- NILAI -->
+
+<div class="card">
+
+<h2>
+<i class="fa-solid fa-star"></i>
+Nilai-Nilai XI TJKT 2
+</h2>
+
+<div class="values">
+
+<div class="value">
+<i class="fa-solid fa-handshake"></i>
+Kebersamaan
+</div>
+
+<div class="value">
+<i class="fa-solid fa-heart"></i>
+Kekompakan
+</div>
+
+<div class="value">
+<i class="fa-solid fa-people-group"></i>
+Persahabatan
+</div>
+
+<div class="value">
+<i class="fa-solid fa-lightbulb"></i>
+Kreativitas
+</div>
+
+<div class="value">
+<i class="fa-solid fa-shield"></i>
+Tanggung Jawab
+</div>
+
+<div class="value">
+<i class="fa-solid fa-face-smile"></i>
+Keceriaan
+</div>
+
+</div>
+
+</div>
+
+
+<!-- IDENTITAS -->
+
+<div class="card">
+
+<h2>
+<i class="fa-solid fa-id-card"></i>
+Identitas Kelas
+</h2>
+
+<p>
+
+<b>Nama Kelas:</b> XI TJKT 2
+
+<br>
+
+<b>Program Keahlian:</b>
+Teknik Jaringan Komputer dan Telekomunikasi
+
+<br>
+
+<b>Tingkat:</b> XI
+
+</p>
+
+</div>
+
+
+</main>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+&copy; Adli Yanuar Firmansyah.
+
+<br>
+
+XI TJKT 2 • Class Website
+
+</footer>
+
+
+<script>
+
+/* MENU */
+
+function toggleMenu(){
+
+document
+.getElementById("sidebar")
+.classList
+.toggle("active");
+
+}
+
+
+/* CLOCK */
+
+function updateClock(){
+
+const now=new Date();
+
+document.getElementById("clock").textContent=
+
+String(now.getHours()).padStart(2,"0")
++
+":"+
+String(now.getMinutes()).padStart(2,"0")
++
+":"+
+String(now.getSeconds()).padStart(2,"0");
+
+}
+
+setInterval(updateClock,1000);
+
+updateClock();
+
+
+/* PARTICLE */
+
+const canvas =
+document.getElementById("particleCanvas");
+
+const ctx =
+canvas.getContext("2d");
+
+let particles=[];
+
+
+function resize(){
+
+canvas.width=innerWidth;
+canvas.height=innerHeight;
+
+}
+
+resize();
+
+window.addEventListener("resize",resize);
+
+
+class Particle{
+
+constructor(){
+
+this.x=Math.random()*canvas.width;
+this.y=Math.random()*canvas.height;
+
+this.r=Math.random()*3+1;
+
+this.speed=(Math.random()*.6)+.2;
+
+}
+
+update(){
+
+this.y-=this.speed;
+
+if(this.y<-10){
+
+this.y=canvas.height+10;
+
+this.x=Math.random()*canvas.width;
+
+}
+
+}
+
+draw(){
+
+ctx.beginPath();
+
+ctx.arc(
+this.x,
+this.y,
+this.r,
+0,
+Math.PI*2
+);
+
+ctx.fillStyle="rgba(0,234,255,.65)";
+
+ctx.shadowBlur=10;
+
+ctx.shadowColor="#00eaff";
+
+ctx.fill();
+
+ctx.shadowBlur=0;
+
+}
+
+}
+
+
+for(let i=0;i<45;i++){
+
+particles.push(new Particle());
+
+}
+
+
+function animate(){
+
+ctx.clearRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+particles.forEach(p=>{
+
+p.update();
+p.draw();
+
+});
+
+requestAnimationFrame(animate);
+
+}
+
+animate();
+
+</script>
+
+</body>
+</html>

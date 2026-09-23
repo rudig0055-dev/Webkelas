@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Jadwal Piket - XI TJKT 2</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+
+/* ================= GLOBAL ================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:monospace;
+    background:linear-gradient(135deg,#1a1a40,#0f0c29);
+    color:#fff;
+    min-height:100vh;
+    overflow-x:hidden;
+}
+
+
+/* ================= PARTICLE ================= */
+
+#particleCanvas{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    z-index:-1;
+    pointer-events:none;
+}
+
+
+/* ================= MENU ================= */
+
+.menu-toggle{
+    position:fixed;
+    top:18px;
+    left:18px;
+    width:46px;
+    height:46px;
+    border:1px solid #00eaff;
+    border-radius:12px;
+    background:rgba(0,0,0,.3);
+    color:white;
+    cursor:pointer;
+    z-index:1001;
+    font-size:20px;
+}
+
+.menu-toggle:hover{
+    background:rgba(0,234,255,.15);
+}
+
+
+/* ================= SIDEBAR ================= */
+
+.sidebar{
+    position:fixed;
+    top:0;
+    left:-270px;
+    width:270px;
+    height:100vh;
+    padding:80px 20px 20px;
+    background:rgba(10,10,35,.95);
+    backdrop-filter:blur(15px);
+    border-right:1px solid cyan;
+    z-index:1000;
+    transition:.3s;
+}
+
+.sidebar.active{
+    left:0;
+}
+
+.sidebar-title{
+    text-align:center;
+    color:#00eaff;
+    margin-bottom:25px;
+}
+
+.sidebar ul{
+    list-style:none;
+}
+
+.sidebar li{
+    margin-bottom:12px;
+    border:1px solid #2b2bf6;
+    border-radius:12px;
+    overflow:hidden;
+}
+
+.sidebar li:hover,
+.sidebar li.active{
+    background:linear-gradient(135deg,#2b2bf6,#17173e);
+    border-color:#00eaff;
+}
+
+.sidebar a{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:13px;
+    color:white;
+    text-decoration:none;
+}
+
+
+/* ================= HEADER ================= */
+
+header{
+    text-align:center;
+    padding:80px 20px 25px;
+}
+
+header h1{
+    font-size:2rem;
+    text-shadow:0 0 15px #00eaff55;
+}
+
+header p{
+    color:#b9c0d0;
+    margin-top:8px;
+}
+
+
+/* ================= CLOCK ================= */
+
+.clock{
+    display:inline-block;
+    margin-top:12px;
+    padding:8px 15px;
+    border:1px solid #00eaff66;
+    border-radius:20px;
+    color:#00eaff;
+}
+
+
+/* ================= MAIN ================= */
+
+main{
+    max-width:1000px;
+    margin:auto;
+    padding:10px 20px 50px;
+}
+
+
+/* ================= CARD ================= */
+
+.card{
+    margin-bottom:20px;
+    padding:25px;
+    border:1px solid #00eaff;
+    border-radius:20px;
+    background:rgba(255,255,255,.05);
+    backdrop-filter:blur(12px);
+    text-align:center;
+    box-shadow:0 10px 30px #0005;
+}
+
+.card h2{
+    color:#00eaff;
+    margin-bottom:20px;
+}
+
+
+/* ================= JADWAL ================= */
+
+.piket-list{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:15px;
+}
+
+.piket-person{
+    min-width:160px;
+    padding:15px;
+    border:1px solid #2b2bf6;
+    border-radius:14px;
+    background:#ffffff08;
+    transition:.3s;
+}
+
+.piket-person:hover{
+    border-color:#00eaff;
+    background:#00eaff0d;
+    transform:translateY(-3px);
+}
+
+.piket-person i{
+    color:#00eaff;
+    margin-bottom:8px;
+}
+
+.piket-person span{
+    display:block;
+    font-size:.8rem;
+}
+
+.nomor{
+    color:#00eaff;
+    font-weight:bold;
+    margin-bottom:5px;
+}
+
+
+/* ================= CATATAN ================= */
+
+.note{
+    color:#aeb6ca;
+    font-size:.75rem;
+    margin-top:15px;
+    line-height:1.6;
+}
+
+
+/* ================= FOOTER ================= */
+
+footer{
+    text-align:center;
+    padding:35px 20px;
+    color:#aeb6ca;
+    font-size:.8rem;
+}
+
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:600px){
+
+    main{
+        padding:10px 12px 40px;
+    }
+
+    .card{
+        padding:18px 12px;
+    }
+
+    .piket-person{
+        min-width:135px;
+        flex:1;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================= PARTICLE ================= -->
+
+<canvas id="particleCanvas"></canvas>
+
+
+<!-- ================= MENU ================= -->
+
+<button class="menu-toggle" onclick="toggleMenu()">
+    <i class="fa-solid fa-bars"></i>
+</button>
+
+
+<!-- ================= SIDEBAR ================= -->
+
+<nav class="sidebar" id="sidebar">
+
+    <div class="sidebar-title">
+        <i class="fa-solid fa-network-wired"></i>
+        XI TJKT 2
+    </div>
+
+    <ul>
+
+        <li>
+            <a href="profil.html">
+                <i class="fa-solid fa-house"></i>
+                PROFIL KELAS
+            </a>
+        </li>
+
+        <li>
+            <a href="struktur.html">
+                <i class="fa-solid fa-sitemap"></i>
+                STRUKTUR
+            </a>
+        </li>
+
+        <li>
+            <a href="media_sosial.html">
+                <i class="fa-solid fa-share-nodes"></i>
+                MEDIA SOSIAL
+            </a>
+        </li>
+
+        <li>
+            <a href="cerita.html">
+                <i class="fa-solid fa-images"></i>
+                MOMEN FOTO BERSAMA
+            </a>
+        </li>
+
+        <li>
+            <a href="siswa.html">
+                <i class="fa-solid fa-users"></i>
+                DATA MEMBER
+            </a>
+        </li>
+
+        <li class="active">
+            <a href="piket.html">
+                <i class="fa-solid fa-broom"></i>
+                JADWAL PIKET
+            </a>
+        </li>
+
+    </ul>
+
+</nav>
+
+
+<!-- ================= HEADER ================= -->
+
+<header>
+
+    <h1>XI TJKT 2</h1>
+
+    <p>
+        Class Program • Jadwal Piket
+    </p>
+
+    <div class="clock" id="clock">
+        00:00:00
+    </div>
+
+</header>
+
+
+<!-- ================= MAIN ================= -->
+
+<main>
+
+
+<!-- ================= SENIN ================= -->
+
+<div class="card">
+
+    <h2>
+        <i class="fa-solid fa-calendar-day"></i>
+        SENIN
+    </h2>
+
+    <div class="piket-list">
+
+        <div class="piket-person">
+            <i class="fa-solid fa-user"></i>
+            <span class="nomor">01</span>
+            <span>WENDI</span>
+        </div>
+
+        <div class="piket-person">
+            <i class="fa-solid fa-user"></i>
+            <span class="nomor">02</span>
+            <span>DIMAS ADI MULYONO</span>
+        </div>
+
+        <div class="piket-person">
+            <i class="fa-solid fa-user"></i>
+            <span class="nomor">03</span>
+            <span>AGUNG PRASTYO</span>
+        </div>
+
+        <div class="piket-person">
+            <i class="fa-solid fa-user"></i>
+            <span class="nomor">04</span>
+            <span>DUROTUN NAFISHA</span>
+        </div>
+
+        <div class="piket-person">
+            <i class="fa-solid fa-user"></i>
+            <span class="nomor">05</span>
+            <span>DESTIA MURTIASIH</span>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= SELASA ================= -->
+
+<div class="card">
+
+    <h2>
+        <i class="fa-solid fa-calendar-day"></i>
+        SELASA
+    </h2>
+
+    <div class="piket-list">
+
+        <div class="piket-person">
+            <i class="fa-solid fa-user"></i>
+            <span class="nomor">01</span>
+            <span>ADLI YANUAR F</span>
+        </div>
+
+        <div class="piket-person">
+            <i class="fa-solid fa-user"></i>
+            <span class="nomor">02</span>
+            <span>RADITYA NAJIB</span>
+        </div>
+
+        <div class="piket-person">
+            <i class="fa-solid fa-user"></i>
+            <span class="nomor">03</span>
+            <span>DANI RIVANSYAH</span>
+        </div>
+
+        <div class="piket-person">
+            <i class="fa-solid fa-user"></i>
+            <span class="nomor">04</span>
+            <span>AL'MIRA LUFIANA SYIFA</span>
+        </div>
+
+        <div class="piket-person">
+            <i class="fa-solid fa-user"></i>
+            <span class="nomor">05</span>
+            <span>DIYANA NOVITASARI</span>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= RABU ================= -->
+
+<div class="card">
+
+    <h2>
+        <i class="fa-solid fa-calendar-day"></i>
+        RABU
+    </h2>
+
+    <div class="piket-list">
+
+        <div class="piket-person">
+            <i class="fa-solid fa-user"></i>
+            <span class="nomor">01</span>
+            <span>AZKA FAIQ RIZQULLOH</span>
+        </div>
+
+        <div class="piket-person">
+            <i class="fa-solid fa-user"></i>
+            <span class="nomor">02</span>
+            <span>ASYAN ZAIBAN ALTAFIAN</span>
+        </div>
+
+        <div class="piket-person">
+            <i class="fa-solid fa-user"></i>
+            <span class="nomor">03</span>
+            <span>MUHAMMAD REYFAN</span>
+        </div>
+
+        <div class="piket-person">
+            <i class="fa-solid fa-user"></i>
+            <span class="nomor">04</span>
+            <span>MARCHEL REZKY PRATAMA</span>
+        </div>
+
+        <div class="piket-person">
+            <i class="fa-solid fa-user"></i>
+            <span class="nomor">05</span>
+            <span>BANATUN MUTMAINAH</span>
+        </div>
+
+        <div class="piket-person">
+            <i class="fa-solid fa-user"></i>
+            <span class="nomor">06</span>
+            <span>NAFISHA AURELLIA OKTARINA</span>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= KAMIS ================= -->
+
+<div class="card">
+
+    <h2>
+        <i class="fa-solid fa-calendar-day"></i>
+        KAMIS
+    </h2>
+
+    <div class="piket-list">
+
+        <div class="piket-person">
+            <i class="fa-solid fa-user"></i>
+            <span class="nomor">01</span>
+            <span>KEYSA ADILA MAHARANI</span>
+        </div>
+
+        <div class="piket-person">
+            <i class="fa-solid fa-user"></i>
+            <span class="nomor">02</span>
+            <span>DINDA AMAL BAROKAH</span>
+        </div>
+
+        <div class="piket-person">
+            <i class="fa-solid fa-user"></i>
+            <span class="nomor">03</span>
+            <span>DIKI PRASETIYO</span>
+        </div>
+
+        <div class="piket-person">
+            <i class="fa-solid fa-user"></i>
+            <span class="nomor">04</span>
+            <span>AHMAD ARYO JAGAD</span>
+        </div>
+
+        <div class="piket-person">
+            <i class="fa-solid fa-user"></i>
+            <span class="nomor">05</span>
+            <span>RAFA RAMADHAN</span>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= JUMAT ================= -->
+
+<div class="card">
+
+    <h2>
+        <i class="fa-solid fa-calendar-day"></i>
+        JUMAT
+    </h2>
+
+    <div class="piket-list">
+
+        <div class="piket-person">
+            <i class="fa-solid fa-user"></i>
+            <span class="nomor">01</span>
+            <span>HUSNUL JULI LESTARI</span>
+        </div>
+
+        <div class="piket-person">
+            <i class="fa-solid fa-user"></i>
+            <span class="nomor">02</span>
+            <span>DONI PRASETIA</span>
+        </div>
+
+        <div class="piket-person">
+            <i class="fa-solid fa-user"></i>
+            <span class="nomor">03</span>
+            <span>KHOERUL ANAM</span>
+        </div>
+
+        <div class="piket-person">
+            <i class="fa-solid fa-user"></i>
+            <span class="nomor">04</span>
+            <span>AGUNG LAKSANA</span>
+        </div>
+
+        <div class="piket-person">
+            <i class="fa-solid fa-user"></i>
+            <span class="nomor">05</span>
+            <span>SILFI</span>
+        </div>
+
+        <div class="piket-person">
+            <i class="fa-solid fa-user"></i>
+            <span class="nomor">06</span>
+            <span>MEYSA</span>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= CATATAN ================= -->
+
+<div class="card">
+
+    <h2>
+        <i class="fa-solid fa-circle-info"></i>
+        Catatan
+    </h2>
+
+    <div class="note">
+
+        Setiap anggota diharapkan melaksanakan
+        tugas piket sesuai dengan jadwal yang
+        telah ditentukan.
+
+        <br><br>
+
+        <i class="fa-solid fa-broom"></i>
+        Jaga kebersihan dan kenyamanan kelas
+        XI TJKT 2 bersama-sama.
+
+    </div>
+
+</div>
+
+
+</main>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    &copy; Adli Yanuar Firmansyah.
+
+</footer>
+
+
+<script>
+
+
+/* ================= MENU ================= */
+
+function toggleMenu(){
+
+    document
+    .getElementById("sidebar")
+    .classList
+    .toggle("active");
+
+}
+
+
+/* ================= CLOCK ================= */
+
+function updateClock(){
+
+    const now=new Date();
+
+    document
+    .getElementById("clock")
+    .textContent=
+
+        String(now.getHours()).padStart(2,"0")
+        +":"
+        +
+        String(now.getMinutes()).padStart(2,"0")
+        +":"
+        +
+        String(now.getSeconds()).padStart(2,"0");
+
+}
+
+setInterval(updateClock,1000);
+
+updateClock();
+
+
+/* ================= PARTICLE ================= */
+
+const canvas=
+document.getElementById("particleCanvas");
+
+const ctx=
+canvas.getContext("2d");
+
+let particles=[];
+
+
+function resize(){
+
+    canvas.width=innerWidth;
+
+    canvas.height=innerHeight;
+
+}
+
+resize();
+
+window.addEventListener(
+    "resize",
+    resize
+);
+
+
+class Particle{
+
+    constructor(){
+
+        this.x=
+            Math.random()*
+            canvas.width;
+
+        this.y=
+            Math.random()*
+            canvas.height;
+
+        this.r=
+            Math.random()*3+1;
+
+        this.speed=
+            Math.random()*.6+.2;
+
+    }
+
+    update(){
+
+        this.y-=this.speed;
+
+        if(this.y<-10){
+
+            this.y=
+                canvas.height+10;
+
+            this.x=
+                Math.random()*
+                canvas.width;
+
+        }
+
+    }
+
+    draw(){
+
+        ctx.beginPath();
+
+        ctx.arc(
+            this.x,
+            this.y,
+            this.r,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fillStyle=
+            "rgba(0,234,255,.65)";
+
+        ctx.shadowBlur=10;
+
+        ctx.shadowColor=
+            "#00eaff";
+
+        ctx.fill();
+
+        ctx.shadowBlur=0;
+
+    }
+
+}
+
+
+for(let i=0;i<45;i++){
+
+    particles.push(
+        new Particle()
+    );
+
+}
+
+
+function animate(){
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    particles.forEach(p=>{
+
+        p.update();
+        p.draw();
+
+    });
+
+    requestAnimationFrame(
+        animate
+    );
+
+}
+
+animate();
+
+</script>
+
+</body>
+
+</html>

@@ -1,1257 +1,1258 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Foto Bersama - XI TJKT 2</title>
-
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            min-height: 100vh;
-            color: #fff;
-            background: linear-gradient(135deg, #1a1a40, #0f0c29);
-            overflow-x: hidden;
-        }
-
-        /* ================= PARTICLE ================= */
-
-        #particleCanvas {
-            position: fixed;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        /* ================= MENU ================= */
-
-        .menu-toggle {
-            position: fixed;
-            top: 18px;
-            left: 18px;
-            width: 45px;
-            height: 45px;
-            border: 1px solid rgba(0, 234, 255, .4);
-            border-radius: 12px;
-            background: rgba(255, 255, 255, .08);
-            backdrop-filter: blur(10px);
-            color: #00eaff;
-            font-size: 20px;
-            cursor: pointer;
-            z-index: 1001;
-            box-shadow: 0 0 15px rgba(0, 234, 255, .2);
-        }
-
-        .menu-toggle:hover {
-            background: rgba(0, 234, 255, .15);
-        }
-
-        /* ================= SIDEBAR ================= */
-
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: -280px;
-            width: 270px;
-            height: 100vh;
-            padding: 80px 20px 20px;
-            background: rgba(10, 10, 35, .97);
-            backdrop-filter: blur(15px);
-            border-right: 1px solid #00eaff;
-            transition: .35s ease;
-            z-index: 1000;
-            box-shadow: 5px 0 25px rgba(0, 0, 0, .5);
-        }
-
-        .sidebar.active {
-            left: 0;
-        }
-
-        .sidebar-title {
-            text-align: center;
-            color: #00eaff;
-            margin-bottom: 25px;
-            font-size: 22px;
-            text-shadow: 0 0 10px rgba(0, 234, 255, .5);
-        }
-
-        .sidebar ul {
-            list-style: none;
-        }
-
-        .sidebar li {
-            margin: 9px 0;
-        }
-
-        .sidebar a {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 13px;
-            border-radius: 10px;
-            color: #fff;
-            text-decoration: none;
-            background: rgba(255, 255, 255, .05);
-            border: 1px solid rgba(0, 234, 255, .15);
-            transition: .25s;
-        }
-
-        .sidebar a:hover,
-        .sidebar a.active {
-            color: #00eaff;
-            background: rgba(0, 234, 255, .12);
-            border-color: #00eaff;
-            transform: translateX(5px);
-        }
-
-        .sidebar i {
-            width: 20px;
-            text-align: center;
-        }
-
-        /* ================= OVERLAY ================= */
-
-        .overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, .6);
-            z-index: 999;
-            display: none;
-        }
-
-        .overlay.active {
-            display: block;
-        }
-
-        /* ================= HEADER ================= */
-
-        header {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-            padding: 85px 20px 20px;
-        }
-
-        header h1 {
-            font-size: clamp(32px, 8vw, 55px);
-            color: #00eaff;
-            text-shadow: 0 0 18px rgba(0, 234, 255, .6);
-            margin-bottom: 8px;
-        }
-
-        header p {
-            color: #aaa;
-            font-size: 15px;
-        }
-
-        /* ================= CLOCK ================= */
-
-        .clock {
-            display: inline-block;
-            margin-top: 18px;
-            padding: 9px 18px;
-            border-radius: 20px;
-            color: #00eaff;
-            background: rgba(0, 234, 255, .08);
-            border: 1px solid rgba(0, 234, 255, .25);
-            font-weight: bold;
-            font-size: 16px;
-            letter-spacing: 1px;
-        }
-
-        /* ================= MAIN ================= */
-
-        main {
-            position: relative;
-            z-index: 2;
-            width: min(1100px, 92%);
-            margin: 20px auto 0;
-        }
-
-        .gallery-header {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .gallery-header h2 {
-            color: #00eaff;
-            font-size: 26px;
-            margin-bottom: 8px;
-        }
-
-        .gallery-header p {
-            color: #aaa;
-            line-height: 1.6;
-        }
-
-        .photo-count {
-            display: inline-block;
-            margin-top: 12px;
-            padding: 7px 14px;
-            border-radius: 20px;
-            color: #00eaff;
-            background: rgba(0, 234, 255, .08);
-            border: 1px solid rgba(0, 234, 255, .2);
-            font-size: 13px;
-        }
-
-        /* ================= GALLERY ================= */
-
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 18px;
-        }
-
-        .photo-card {
-            position: relative;
-            aspect-ratio: 4 / 3;
-            overflow: hidden;
-            border-radius: 18px;
-            background: rgba(255, 255, 255, .05);
-            border: 1px solid rgba(0, 234, 255, .2);
-            cursor: pointer;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, .25);
-            transition: .3s ease;
-        }
-
-        .photo-card:hover {
-            transform: translateY(-6px);
-            border-color: #00eaff;
-            box-shadow:
-                0 0 25px rgba(0, 234, 255, .25),
-                0 12px 30px rgba(0, 0, 0, .35);
-        }
-
-        .photo-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            transition: .4s ease;
-        }
-
-        .photo-card:hover img {
-            transform: scale(1.08);
-        }
-
-        .photo-overlay {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            padding: 15px;
-            background: linear-gradient(
-                transparent 45%,
-                rgba(0, 0, 0, .75)
-            );
-            opacity: 0;
-            transition: .3s;
-        }
-
-        .photo-card:hover .photo-overlay {
-            opacity: 1;
-        }
-
-        .photo-number {
-            color: #fff;
-            font-size: 13px;
-            font-weight: bold;
-        }
-
-        .zoom-icon {
-            width: 35px;
-            height: 35px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            background: rgba(0, 234, 255, .85);
-            color: #111;
-        }
-
-        /* ================= LIGHTBOX ================= */
-
-        .lightbox {
-            position: fixed;
-            inset: 0;
-            z-index: 2000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 25px;
-            background: rgba(0, 0, 0, .92);
-            backdrop-filter: blur(10px);
-        }
-
-        .lightbox.active {
-            display: flex;
-        }
-
-        .lightbox img {
-            max-width: 90vw;
-            max-height: 82vh;
-            border-radius: 12px;
-            border: 1px solid rgba(0, 234, 255, .5);
-            box-shadow: 0 0 40px rgba(0, 234, 255, .15);
-            object-fit: contain;
-        }
-
-        .close-lightbox {
-            position: absolute;
-            top: 20px;
-            right: 25px;
-            width: 45px;
-            height: 45px;
-            border: none;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, .1);
-            color: #fff;
-            font-size: 22px;
-            cursor: pointer;
-        }
-
-        .close-lightbox:hover {
-            background: rgba(0, 234, 255, .2);
-            color: #00eaff;
-        }
-
-        .lightbox-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 48px;
-            height: 48px;
-            border: 1px solid rgba(0, 234, 255, .4);
-            border-radius: 50%;
-            background: rgba(255, 255, 255, .1);
-            color: #fff;
-            font-size: 20px;
-            cursor: pointer;
-        }
-
-        .lightbox-btn:hover {
-            background: #00eaff;
-            color: #111;
-        }
-
-        .prev-btn {
-            left: 20px;
-        }
-
-        .next-btn {
-            right: 20px;
-        }
-
-        .lightbox-info {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #aaa;
-            font-size: 13px;
-        }
-
-        /* ================= INFO ================= */
-
-        .info-box {
-            margin-top: 30px;
-            padding: 22px;
-            text-align: center;
-            border-radius: 18px;
-            background: rgba(255, 255, 255, .05);
-            border: 1px solid rgba(0, 234, 255, .18);
-        }
-
-        .info-box i {
-            color: #00eaff;
-            font-size: 25px;
-            margin-bottom: 10px;
-        }
-
-        .info-box p {
-            color: #aaa;
-            line-height: 1.6;
-        }
-
-        /* ================= TOP ================= */
-
-        #topBtn {
-            position: fixed;
-            right: 18px;
-            bottom: 78px;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            border: 1px solid rgba(0, 234, 255, .3);
-            background: rgba(0, 234, 255, .1);
-            color: #00eaff;
-            cursor: pointer;
-            display: none;
-            z-index: 100;
-        }
-
-        #topBtn:hover {
-            background: #00eaff;
-            color: #111;
-        }
-
-        /* ================= FOOTER ================= */
-
-        footer {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-            margin-top: 50px;
-            padding: 30px 15px;
-            color: #888;
-            border-top: 1px solid rgba(255, 255, 255, .08);
-        }
-
-        footer span {
-            color: #00eaff;
-        }
-
-        /* ================= RESPONSIVE ================= */
-
-        @media (max-width: 900px) {
-            .gallery {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        @media (max-width: 650px) {
-
-            .gallery {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
-            }
-
-            .photo-card {
-                border-radius: 13px;
-            }
-
-            .photo-overlay {
-                opacity: 1;
-                padding: 8px;
-            }
-
-            .zoom-icon {
-                width: 30px;
-                height: 30px;
-                font-size: 12px;
-            }
-
-            .lightbox img {
-                max-width: 95vw;
-                max-height: 75vh;
-            }
-
-            .lightbox-btn {
-                width: 40px;
-                height: 40px;
-            }
-
-            .prev-btn {
-                left: 8px;
-            }
-
-            .next-btn {
-                right: 8px;
-            }
-
-            .sidebar {
-                width: 250px;
-            }
-        }
-    </style>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Momen Foto Bersama - XI TJKT 2</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+
+/* ================= GLOBAL ================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:monospace;
+    background:linear-gradient(135deg,#1a1a40,#0f0c29);
+    color:#fff;
+    min-height:100vh;
+    overflow-x:hidden;
+}
+
+
+/* ================= PARTICLE ================= */
+
+#particleCanvas{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    z-index:-1;
+    pointer-events:none;
+}
+
+
+/* ================= MENU ================= */
+
+.menu-toggle{
+    position:fixed;
+    top:18px;
+    left:18px;
+    width:46px;
+    height:46px;
+    border:1px solid #00eaff;
+    border-radius:12px;
+    background:rgba(0,0,0,.3);
+    color:white;
+    cursor:pointer;
+    z-index:1001;
+    font-size:20px;
+}
+
+.menu-toggle:hover{
+    background:rgba(0,234,255,.15);
+}
+
+
+/* ================= SIDEBAR ================= */
+
+.sidebar{
+    position:fixed;
+    top:0;
+    left:-270px;
+    width:270px;
+    height:100vh;
+    padding:80px 20px 20px;
+    background:rgba(10,10,35,.95);
+    backdrop-filter:blur(15px);
+    border-right:1px solid cyan;
+    z-index:1000;
+    transition:.3s;
+}
+
+.sidebar.active{
+    left:0;
+}
+
+.sidebar-title{
+    text-align:center;
+    color:#00eaff;
+    margin-bottom:25px;
+}
+
+.sidebar ul{
+    list-style:none;
+}
+
+.sidebar li{
+    margin-bottom:12px;
+    border:1px solid #2b2bf6;
+    border-radius:12px;
+    overflow:hidden;
+}
+
+.sidebar li:hover,
+.sidebar li.active{
+    background:linear-gradient(135deg,#2b2bf6,#17173e);
+    border-color:#00eaff;
+}
+
+.sidebar a{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:13px;
+    color:white;
+    text-decoration:none;
+}
+
+
+/* ================= HEADER ================= */
+
+header{
+    text-align:center;
+    padding:80px 20px 25px;
+}
+
+header h1{
+    font-size:2rem;
+    text-shadow:0 0 15px #00eaff55;
+}
+
+header p{
+    color:#b9c0d0;
+    margin-top:8px;
+}
+
+
+/* ================= CLOCK ================= */
+
+.clock{
+    display:inline-block;
+    margin-top:12px;
+    padding:8px 15px;
+    border:1px solid #00eaff66;
+    border-radius:20px;
+    color:#00eaff;
+}
+
+
+/* ================= MAIN ================= */
+
+main{
+    max-width:1000px;
+    margin:auto;
+    padding:10px 20px 50px;
+}
+
+
+/* ================= CARD ================= */
+
+.card{
+    margin-bottom:20px;
+    padding:25px;
+    border:1px solid #00eaff;
+    border-radius:20px;
+    background:rgba(255,255,255,.05);
+    backdrop-filter:blur(12px);
+    text-align:center;
+    box-shadow:0 10px 30px #0005;
+}
+
+.card h2{
+    color:#00eaff;
+    margin-bottom:20px;
+}
+
+
+/* ================= GALLERY ================= */
+
+.gallery{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+}
+
+.photo{
+    position:relative;
+    aspect-ratio:4/3;
+    overflow:hidden;
+    border:1px solid #2b2bf6;
+    border-radius:14px;
+    background:#ffffff08;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.photo:hover{
+    border-color:#00eaff;
+    transform:translateY(-4px);
+    box-shadow:0 8px 25px #00eaff22;
+}
+
+.photo img{
+    width:100%;
+    height:100%;
+    display:block;
+    object-fit:cover;
+    transition:.3s;
+}
+
+.photo:hover img{
+    transform:scale(1.06);
+}
+
+.photo-number{
+    position:absolute;
+    left:8px;
+    bottom:8px;
+    padding:5px 9px;
+    border-radius:8px;
+    background:rgba(0,0,0,.7);
+    color:#00eaff;
+    font-size:.7rem;
+}
+
+.zoom{
+    position:absolute;
+    right:8px;
+    bottom:8px;
+    width:30px;
+    height:30px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    background:#00eaff;
+    color:#111;
+    opacity:0;
+    transition:.3s;
+}
+
+.photo:hover .zoom{
+    opacity:1;
+}
+
+
+/* ================= NOTE ================= */
+
+.note{
+    color:#aeb6ca;
+    font-size:.75rem;
+    margin-top:15px;
+    line-height:1.6;
+}
+
+
+/* ================= LIGHTBOX ================= */
+
+.lightbox{
+    position:fixed;
+    inset:0;
+    z-index:2000;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:rgba(0,0,0,.92);
+    backdrop-filter:blur(10px);
+}
+
+.lightbox.active{
+    display:flex;
+}
+
+.lightbox img{
+    max-width:90vw;
+    max-height:82vh;
+    object-fit:contain;
+    border:1px solid #00eaff;
+    border-radius:14px;
+    box-shadow:0 0 30px #00eaff22;
+}
+
+
+/* ================= LIGHTBOX BUTTON ================= */
+
+.close{
+    position:absolute;
+    top:20px;
+    right:20px;
+    width:45px;
+    height:45px;
+    border:1px solid #00eaff66;
+    border-radius:50%;
+    background:#ffffff12;
+    color:white;
+    cursor:pointer;
+    font-size:20px;
+}
+
+.close:hover{
+    background:#00eaff;
+    color:#111;
+}
+
+.nav-btn{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:48px;
+    height:48px;
+    border:1px solid #00eaff66;
+    border-radius:50%;
+    background:#ffffff12;
+    color:white;
+    cursor:pointer;
+    font-size:18px;
+}
+
+.nav-btn:hover{
+    background:#00eaff;
+    color:#111;
+}
+
+.prev{
+    left:20px;
+}
+
+.next{
+    right:20px;
+}
+
+.lightbox-info{
+    position:absolute;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    color:#aeb6ca;
+    font-size:.8rem;
+}
+
+
+/* ================= FOOTER ================= */
+
+footer{
+    text-align:center;
+    padding:35px 20px;
+    color:#aeb6ca;
+    font-size:.8rem;
+}
+
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:800px){
+
+    .gallery{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+}
+
+@media(max-width:600px){
+
+    main{
+        padding:10px 12px 40px;
+    }
+
+    .card{
+        padding:18px 12px;
+    }
+
+    .gallery{
+        grid-template-columns:repeat(2,1fr);
+        gap:12px;
+    }
+
+    .photo{
+        border-radius:12px;
+    }
+
+    .zoom{
+        opacity:1;
+        width:27px;
+        height:27px;
+        font-size:.7rem;
+    }
+
+    .lightbox img{
+        max-width:95vw;
+        max-height:75vh;
+    }
+
+    .nav-btn{
+        width:40px;
+        height:40px;
+    }
+
+    .prev{
+        left:8px;
+    }
+
+    .next{
+        right:8px;
+    }
+
+}
+
+</style>
+
 </head>
+
 
 <body>
 
-    <!-- PARTICLE -->
-    <canvas id="particleCanvas"></canvas>
 
-    <!-- MENU -->
-    <button class="menu-toggle" id="menuBtn" aria-label="Buka menu">
-        <i class="fa-solid fa-bars"></i>
-    </button>
+<!-- ================= PARTICLE ================= -->
 
-    <!-- SIDEBAR -->
-    <nav class="sidebar" id="sidebar">
+<canvas id="particleCanvas"></canvas>
 
-        <div class="sidebar-title">
-            <i class="fa-solid fa-network-wired"></i>
-            XI TJKT 2
-        </div>
 
-        <ul>
+<!-- ================= MENU ================= -->
 
-            <li>
-                <a href="struktur.html">
-                    <i class="fa-solid fa-sitemap"></i>
-                    STRUKTUR
-                </a>
-            </li>
+<button class="menu-toggle" onclick="toggleMenu()">
+    <i class="fa-solid fa-bars"></i>
+</button>
 
-            <li>
-                <a href="media_sosial.html">
-                    <i class="fa-solid fa-share-nodes"></i>
-                    MEDIA SOSIAL
-                </a>
-            </li>
 
-            <li>
-                <a href="cerita.html" class="active">
-                    <i class="fa-solid fa-images"></i>
-                    MOMEN FOTO BERSAMA
-                </a>
-            </li>
+<!-- ================= SIDEBAR ================= -->
 
-            <li>
-                <a href="siswa.html">
-                    <i class="fa-solid fa-users"></i>
-                    DATA MEMBER
-                </a>
-            </li>
+<nav class="sidebar" id="sidebar">
 
-        </ul>
-    </nav>
+    <div class="sidebar-title">
+        <i class="fa-solid fa-network-wired"></i>
+        XI TJKT 2
+    </div>
 
-    <!-- OVERLAY -->
-    <div class="overlay" id="overlay"></div>
+    <ul>
 
-    <!-- HEADER -->
-    <header>
+        <li>
+            <a href="profil.html">
+                <i class="fa-solid fa-house"></i>
+                PROFIL KELAS
+            </a>
+        </li>
 
-        <h1>XI TJKT 2</h1>
+        <li>
+            <a href="struktur.html">
+                <i class="fa-solid fa-sitemap"></i>
+                STRUKTUR
+            </a>
+        </li>
 
-        <p>
-            Class Program • Momen Foto Bersama
-        </p>
+        <li>
+            <a href="media_sosial.html">
+                <i class="fa-solid fa-share-nodes"></i>
+                MEDIA SOSIAL
+            </a>
+        </li>
 
-        <div class="clock" id="clock">
-            00:00:00
-        </div>
-
-    </header>
-
-    <!-- MAIN -->
-    <main>
-
-        <div class="gallery-header">
-
-            <h2>
+        <li class="active">
+            <a href="cerita.html">
                 <i class="fa-solid fa-images"></i>
-                Album Foto Bersama
-            </h2>
+                MOMEN FOTO BERSAMA
+            </a>
+        </li>
 
-            <p>
-                Kumpulan momen dan kenangan
-                XI TJKT 2.
-            </p>
+        <li>
+            <a href="siswa.html">
+                <i class="fa-solid fa-users"></i>
+                DATA MEMBER
+            </a>
+        </li>
 
-            <div class="photo-count">
-                <i class="fa-solid fa-camera"></i>
-                16 Foto
-            </div>
+      <li>
+              <a href="piket.html">
+                <i class="fa-solid fa-broom"></i>
+                JADWAL PIKET
+            </a>
+      </li>
 
-        </div>
+      
+    </ul>
 
-        <!-- GALLERY -->
+</nav>
+
+
+<!-- ================= HEADER ================= -->
+
+<header>
+
+    <h1>XI TJKT 2</h1>
+
+    <p>
+        Class Program • Momen Foto Bersama
+    </p>
+
+    <div class="clock" id="clock">
+        00:00:00
+    </div>
+
+</header>
+
+
+<!-- ================= MAIN ================= -->
+
+<main>
+
+
+    <!-- ALBUM -->
+
+    <div class="card">
+
+        <h2>
+            <i class="fa-solid fa-images"></i>
+            Album Foto Bersama
+        </h2>
+
         <div class="gallery">
 
-            <div class="photo-card" onclick="openLightbox(0)">
-                <img src="https://cdn.phototourl.com/free/2026-09-10-dd18b486-94a3-4126-9d9c-851ab467f78d.jpg"
-                     alt="Foto bersama XI TJKT 2 1"
-                     loading="lazy">
-                <div class="photo-overlay">
-                    <span class="photo-number">Foto 01</span>
-                    <span class="zoom-icon">
-                        <i class="fa-solid fa-expand"></i>
-                    </span>
-                </div>
+
+            <!-- FOTO 01 -->
+
+            <div class="photo" onclick="openLightbox(0)">
+
+                <img
+                src="https://cdn.phototourl.com/free/2026-09-10-dd18b486-94a3-4126-9d9c-851ab467f78d.jpg"
+                alt="Foto bersama XI TJKT 2 1"
+                loading="lazy">
+
+                <span class="photo-number">
+                    Foto 01
+                </span>
+
+                <span class="zoom">
+                    <i class="fa-solid fa-expand"></i>
+                </span>
+
             </div>
 
-            <div class="photo-card" onclick="openLightbox(1)">
-                <img src="https://cdn.phototourl.com/free/2026-09-10-adc05816-2c4b-4d1d-95c9-9190635e5020.jpg"
-                     alt="Foto bersama XI TJKT 2 2"
-                     loading="lazy">
-                <div class="photo-overlay">
-                    <span class="photo-number">Foto 02</span>
-                    <span class="zoom-icon">
-                        <i class="fa-solid fa-expand"></i>
-                    </span>
-                </div>
+
+            <!-- FOTO 02 -->
+
+            <div class="photo" onclick="openLightbox(1)">
+
+                <img
+                src="https://cdn.phototourl.com/free/2026-09-10-adc05816-2c4b-4d1d-95c9-9190635e5020.jpg"
+                alt="Foto bersama XI TJKT 2 2"
+                loading="lazy">
+
+                <span class="photo-number">
+                    Foto 02
+                </span>
+
+                <span class="zoom">
+                    <i class="fa-solid fa-expand"></i>
+                </span>
+
             </div>
 
-            <div class="photo-card" onclick="openLightbox(2)">
-                <img src="https://cdn.phototourl.com/free/2026-09-10-7dab0fa1-3210-4a12-bc0e-5d5baf1990d1.jpg"
-                     alt="Foto bersama XI TJKT 2 3"
-                     loading="lazy">
-                <div class="photo-overlay">
-                    <span class="photo-number">Foto 03</span>
-                    <span class="zoom-icon">
-                        <i class="fa-solid fa-expand"></i>
-                    </span>
-                </div>
+
+            <!-- FOTO 03 -->
+
+            <div class="photo" onclick="openLightbox(2)">
+
+                <img
+                src="https://cdn.phototourl.com/free/2026-09-10-7dab0fa1-3210-4a12-bc0e-5d5baf1990d1.jpg"
+                alt="Foto bersama XI TJKT 2 3"
+                loading="lazy">
+
+                <span class="photo-number">
+                    Foto 03
+                </span>
+
+                <span class="zoom">
+                    <i class="fa-solid fa-expand"></i>
+                </span>
+
             </div>
 
-            <div class="photo-card" onclick="openLightbox(3)">
-                <img src="https://cdn.phototourl.com/free/2026-09-10-c23e553d-bf23-49b0-86b0-2d9ec584f79c.jpg"
-                     alt="Foto bersama XI TJKT 2 4"
-                     loading="lazy">
-                <div class="photo-overlay">
-                    <span class="photo-number">Foto 04</span>
-                    <span class="zoom-icon">
-                        <i class="fa-solid fa-expand"></i>
-                    </span>
-                </div>
+
+            <!-- FOTO 04 -->
+
+            <div class="photo" onclick="openLightbox(3)">
+
+                <img
+                src="https://cdn.phototourl.com/free/2026-09-10-c23e553d-bf23-49b0-86b0-2d9ec584f79c.jpg"
+                alt="Foto bersama XI TJKT 2 4"
+                loading="lazy">
+
+                <span class="photo-number">
+                    Foto 04
+                </span>
+
+                <span class="zoom">
+                    <i class="fa-solid fa-expand"></i>
+                </span>
+
             </div>
 
-            <div class="photo-card" onclick="openLightbox(4)">
-                <img src="https://cdn.phototourl.com/free/2026-09-11-1025a284-a563-472c-afe2-ddda1f6790e5.jpg"
-                     alt="Foto bersama XI TJKT 2 5"
-                     loading="lazy">
-                <div class="photo-overlay">
-                    <span class="photo-number">Foto 05</span>
-                    <span class="zoom-icon">
-                        <i class="fa-solid fa-expand"></i>
-                    </span>
-                </div>
+
+            <!-- FOTO 05 -->
+
+            <div class="photo" onclick="openLightbox(4)">
+
+                <img
+                src="https://cdn.phototourl.com/free/2026-09-11-1025a284-a563-472c-afe2-ddda1f6790e5.jpg"
+                alt="Foto bersama XI TJKT 2 5"
+                loading="lazy">
+
+                <span class="photo-number">
+                    Foto 05
+                </span>
+
+                <span class="zoom">
+                    <i class="fa-solid fa-expand"></i>
+                </span>
+
             </div>
 
-            <div class="photo-card" onclick="openLightbox(5)">
-                <img src="https://cdn.phototourl.com/free/2026-09-11-22f6e902-868b-4361-b0f6-31a932d14c1a.jpg"
-                     alt="Foto bersama XI TJKT 2 6"
-                     loading="lazy">
-                <div class="photo-overlay">
-                    <span class="photo-number">Foto 06</span>
-                    <span class="zoom-icon">
-                        <i class="fa-solid fa-expand"></i>
-                    </span>
-                </div>
+
+            <!-- FOTO 06 -->
+
+            <div class="photo" onclick="openLightbox(5)">
+
+                <img
+                src="https://cdn.phototourl.com/free/2026-09-11-22f6e902-868b-4361-b0f6-31a932d14c1a.jpg"
+                alt="Foto bersama XI TJKT 2 6"
+                loading="lazy">
+
+                <span class="photo-number">
+                    Foto 06
+                </span>
+
+                <span class="zoom">
+                    <i class="fa-solid fa-expand"></i>
+                </span>
+
             </div>
 
-            <div class="photo-card" onclick="openLightbox(6)">
-                <img src="https://cdn.phototourl.com/free/2026-09-11-c143c41b-dece-492d-af08-012cd77a0758.jpg"
-                     alt="Foto bersama XI TJKT 2 7"
-                     loading="lazy">
-                <div class="photo-overlay">
-                    <span class="photo-number">Foto 07</span>
-                    <span class="zoom-icon">
-                        <i class="fa-solid fa-expand"></i>
-                    </span>
-                </div>
+
+            <!-- FOTO 07 -->
+
+            <div class="photo" onclick="openLightbox(6)">
+
+                <img
+                src="https://cdn.phototourl.com/free/2026-09-11-c143c41b-dece-492d-af08-012cd77a0758.jpg"
+                alt="Foto bersama XI TJKT 2 7"
+                loading="lazy">
+
+                <span class="photo-number">
+                    Foto 07
+                </span>
+
+                <span class="zoom">
+                    <i class="fa-solid fa-expand"></i>
+                </span>
+
             </div>
 
-            <div class="photo-card" onclick="openLightbox(7)">
-                <img src="https://cdn.phototourl.com/free/2026-09-11-d4758a87-4c17-4e61-a816-93b4218fa53f.jpg"
-                     alt="Foto bersama XI TJKT 2 8"
-                     loading="lazy">
-                <div class="photo-overlay">
-                    <span class="photo-number">Foto 08</span>
-                    <span class="zoom-icon">
-                        <i class="fa-solid fa-expand"></i>
-                    </span>
-                </div>
+
+            <!-- FOTO 08 -->
+
+            <div class="photo" onclick="openLightbox(7)">
+
+                <img
+                src="https://cdn.phototourl.com/free/2026-09-11-d4758a87-4c17-4e61-a816-93b4218fa53f.jpg"
+                alt="Foto bersama XI TJKT 2 8"
+                loading="lazy">
+
+                <span class="photo-number">
+                    Foto 08
+                </span>
+
+                <span class="zoom">
+                    <i class="fa-solid fa-expand"></i>
+                </span>
+
             </div>
 
-            <div class="photo-card" onclick="openLightbox(8)">
-                <img src="https://cdn.phototourl.com/free/2026-09-11-24eef8e4-2cb0-48bb-ab89-a84c78404494.jpg"
-                     alt="Foto bersama XI TJKT 2 9"
-                     loading="lazy">
-                <div class="photo-overlay">
-                    <span class="photo-number">Foto 09</span>
-                    <span class="zoom-icon">
-                        <i class="fa-solid fa-expand"></i>
-                    </span>
-                </div>
+
+            <!-- FOTO 09 -->
+
+            <div class="photo" onclick="openLightbox(8)">
+
+                <img
+                src="https://cdn.phototourl.com/free/2026-09-11-24eef8e4-2cb0-48bb-ab89-a84c78404494.jpg"
+                alt="Foto bersama XI TJKT 2 9"
+                loading="lazy">
+
+                <span class="photo-number">
+                    Foto 09
+                </span>
+
+                <span class="zoom">
+                    <i class="fa-solid fa-expand"></i>
+                </span>
+
             </div>
 
-            <div class="photo-card" onclick="openLightbox(9)">
-                <img src="https://cdn.phototourl.com/free/2026-09-11-6ddb45b3-a87b-4d01-b51a-52794755473e.jpg"
-                     alt="Foto bersama XI TJKT 2 10"
-                     loading="lazy">
-                <div class="photo-overlay">
-                    <span class="photo-number">Foto 10</span>
-                    <span class="zoom-icon">
-                        <i class="fa-solid fa-expand"></i>
-                    </span>
-                </div>
+
+            <!-- FOTO 10 -->
+
+            <div class="photo" onclick="openLightbox(9)">
+
+                <img
+                src="https://cdn.phototourl.com/free/2026-09-11-6ddb45b3-a87b-4d01-b51a-52794755473e.jpg"
+                alt="Foto bersama XI TJKT 2 10"
+                loading="lazy">
+
+                <span class="photo-number">
+                    Foto 10
+                </span>
+
+                <span class="zoom">
+                    <i class="fa-solid fa-expand"></i>
+                </span>
+
             </div>
 
-            <div class="photo-card" onclick="openLightbox(10)">
-                <img src="https://cdn.phototourl.com/free/2026-09-11-01601e6c-fa4b-4b92-b403-7cdfbbfb0024.jpg"
-                     alt="Foto bersama XI TJKT 2 11"
-                     loading="lazy">
-                <div class="photo-overlay">
-                    <span class="photo-number">Foto 11</span>
-                    <span class="zoom-icon">
-                        <i class="fa-solid fa-expand"></i>
-                    </span>
-                </div>
+
+            <!-- FOTO 11 -->
+
+            <div class="photo" onclick="openLightbox(10)">
+
+                <img
+                src="https://cdn.phototourl.com/free/2026-09-11-01601e6c-fa4b-4b92-b403-7cdfbbfb0024.jpg"
+                alt="Foto bersama XI TJKT 2 11"
+                loading="lazy">
+
+                <span class="photo-number">
+                    Foto 11
+                </span>
+
+                <span class="zoom">
+                    <i class="fa-solid fa-expand"></i>
+                </span>
+
             </div>
 
-            <div class="photo-card" onclick="openLightbox(11)">
-                <img src="https://cdn.phototourl.com/free/2026-09-11-dbee3bd4-a65a-4036-9b48-54c1b3870fce.jpg"
-                     alt="Foto bersama XI TJKT 2 12"
-                     loading="lazy">
-                  <div class="photo-overlay">
-                    <span class="photo-number">Foto 12</span>
-                    <span class="zoom-icon">
-                        <i class="fa-solid fa-expand"></i>
-                    </span>
-                </div>
+
+            <!-- FOTO 12 -->
+
+            <div class="photo" onclick="openLightbox(11)">
+
+                <img
+                src="https://cdn.phototourl.com/free/2026-09-11-dbee3bd4-a65a-4036-9b48-54c1b3870fce.jpg"
+                alt="Foto bersama XI TJKT 2 12"
+                loading="lazy">
+
+                <span class="photo-number">
+                    Foto 12
+                </span>
+
+                <span class="zoom">
+                    <i class="fa-solid fa-expand"></i>
+                </span>
+
             </div>
 
-            <div class="photo-card" onclick="openLightbox(12)">
-                <img src="https://cdn.phototourl.com/free/2026-09-11-3a33ac1b-410f-451a-80a5-b882fbe51c6a.jpg"
-                     alt="Foto bersama XI TJKT 2 13"
-                     loading="lazy">
-                <div class="photo-overlay">
-                    <span class="photo-number">Foto 13</span>
-                    <span class="zoom-icon">
-                        <i class="fa-solid fa-expand"></i>
-                    </span>
-                </div>
+
+            <!-- FOTO 13 -->
+
+            <div class="photo" onclick="openLightbox(12)">
+
+                <img
+                src="https://cdn.phototourl.com/free/2026-09-11-3a33ac1b-410f-451a-80a5-b882fbe51c6a.jpg"
+                alt="Foto bersama XI TJKT 2 13"
+                loading="lazy">
+
+                <span class="photo-number">
+                    Foto 13
+                </span>
+
+                <span class="zoom">
+                    <i class="fa-solid fa-expand"></i>
+                </span>
+
             </div>
 
-            <div class="photo-card" onclick="openLightbox(13)">
-                <img src="https://cdn.phototourl.com/free/2026-09-11-3c3aaecd-ebc5-4a36-9056-55281b22c970.jpg"
-                     alt="Foto bersama XI TJKT 2 14"
-                     loading="lazy">
-                <div class="photo-overlay">
-                    <span class="photo-number">Foto 14</span>
-                    <span class="zoom-icon">
-                        <i class="fa-solid fa-expand"></i>
-                    </span>
-                </div>
+
+            <!-- FOTO 14 -->
+
+            <div class="photo" onclick="openLightbox(13)">
+
+                <img
+                src="https://cdn.phototourl.com/free/2026-09-11-3c3aaecd-ebc5-4a36-9056-55281b22c970.jpg"
+                alt="Foto bersama XI TJKT 2 14"
+                loading="lazy">
+
+                <span class="photo-number">
+                    Foto 14
+                </span>
+
+                <span class="zoom">
+                    <i class="fa-solid fa-expand"></i>
+                </span>
+
             </div>
 
-            <div class="photo-card" onclick="openLightbox(14)">
-                <img src="https://cdn.phototourl.com/free/2026-09-11-e9e38ee8-2ad7-4e6d-a703-5a55d651d602.jpg"
-                     alt="Foto bersama XI TJKT 2 15"
-                     loading="lazy">
-                <div class="photo-overlay">
-                    <span class="photo-number">Foto 15</span>
-                    <span class="zoom-icon">
-                        <i class="fa-solid fa-expand"></i>
-                    </span>
-                </div>
+
+            <!-- FOTO 15 -->
+
+            <div class="photo" onclick="openLightbox(14)">
+
+                <img
+                src="https://cdn.phototourl.com/free/2026-09-11-e9e38ee8-2ad7-4e6d-a703-5a55d651d602.jpg"
+                alt="Foto bersama XI TJKT 2 15"
+                loading="lazy">
+
+                <span class="photo-number">
+                    Foto 15
+                </span>
+
+                <span class="zoom">
+                    <i class="fa-solid fa-expand"></i>
+                </span>
+
             </div>
 
-            <div class="photo-card" onclick="openLightbox(15)">
-                <img src="https://cdn.phototourl.com/free/2026-09-11-71bd9be6-3bcb-4c99-8589-e55c2d6d2afa.jpg"
-                     alt="Foto bersama XI TJKT 2 16"
-                     loading="lazy">
-                <div class="photo-overlay">
-                    <span class="photo-number">Foto 16</span>
-                    <span class="zoom-icon">
-                        <i class="fa-solid fa-expand"></i>
-                    </span>
-                </div>
+
+            <!-- FOTO 16 -->
+
+            <div class="photo" onclick="openLightbox(15)">
+
+                <img
+                src="https://cdn.phototourl.com/free/2026-09-11-71bd9be6-3bcb-4c99-8589-e55c2d6d2afa.jpg"
+                alt="Foto bersama XI TJKT 2 16"
+                loading="lazy">
+
+                <span class="photo-number">
+                    Foto 16
+                </span>
+
+                <span class="zoom">
+                    <i class="fa-solid fa-expand"></i>
+                </span>
+
             </div>
+
 
         </div>
 
-        <!-- INFO -->
-        <div class="info-box">
 
-            <i class="fa-solid fa-camera-retro"></i>
+        <div class="note">
 
-            <p>
-                Klik salah satu foto untuk melihat
-                dalam ukuran lebih besar.
-                Gunakan tombol kiri dan kanan untuk
-                berpindah foto.
-            </p>
+            <i class="fa-solid fa-camera"></i>
 
-        </div>
+            Klik salah satu foto untuk melihat
+            ukuran lebih besar. Gunakan tombol
+            kiri dan kanan untuk berpindah foto.
 
-    </main>
-
-    <!-- FOOTER -->
-    <footer>
-
-        <small>
-            © <span>Adli Yanuar Firmansyah</span>
-            • XI TJKT 2
-        </small>
-
-    </footer>
-
-    <!-- LIGHTBOX -->
-    <div class="lightbox" id="lightbox">
-
-        <button
-            class="close-lightbox"
-            id="closeLightbox"
-            aria-label="Tutup">
-            <i class="fa-solid fa-xmark"></i>
-        </button>
-
-        <button
-            class="lightbox-btn prev-btn"
-            id="prevBtn"
-            aria-label="Foto sebelumnya">
-            <i class="fa-solid fa-chevron-left"></i>
-        </button>
-
-        <img id="lightboxImage"
-             src=""
-             alt="Foto XI TJKT 2">
-
-        <button
-            class="lightbox-btn next-btn"
-            id="nextBtn"
-            aria-label="Foto berikutnya">
-            <i class="fa-solid fa-chevron-right"></i>
-        </button>
-
-        <div class="lightbox-info" id="lightboxInfo">
-            Foto 1 dari 16
         </div>
 
     </div>
 
-    <!-- BACK TO TOP -->
-    <button id="topBtn" aria-label="Kembali ke atas">
-        <i class="fa-solid fa-arrow-up"></i>
+
+</main>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    &copy; Adli Yanuar Firmansyah.
+
+</footer>
+
+
+<!-- ================= LIGHTBOX ================= -->
+
+<div class="lightbox" id="lightbox">
+
+    <button class="close" onclick="closeLightbox()">
+        <i class="fa-solid fa-xmark"></i>
     </button>
 
-    <script>
+    <button class="nav-btn prev" onclick="previousPhoto()">
+        <i class="fa-solid fa-chevron-left"></i>
+    </button>
 
-        /* ================= SIDEBAR ================= */
+    <img id="lightboxImage" src="" alt="Foto XI TJKT 2">
 
-        const menuBtn = document.getElementById("menuBtn");
-        const sidebar = document.getElementById("sidebar");
-        const overlay = document.getElementById("overlay");
+    <button class="nav-btn next" onclick="nextPhoto()">
+        <i class="fa-solid fa-chevron-right"></i>
+    </button>
 
-        function openMenu() {
-            sidebar.classList.add("active");
-            overlay.classList.add("active");
+    <div class="lightbox-info" id="lightboxInfo">
+        Foto 1 dari 16
+    </div>
+
+</div>
+
+
+<script>
+
+
+/* ================= MENU ================= */
+
+function toggleMenu(){
+
+    document
+    .getElementById("sidebar")
+    .classList
+    .toggle("active");
+
+}
+
+
+/* ================= CLOCK ================= */
+
+function updateClock(){
+
+    const now=new Date();
+
+    document
+    .getElementById("clock")
+    .textContent=
+
+        String(now.getHours()).padStart(2,"0")
+        +":"+
+
+        String(now.getMinutes()).padStart(2,"0")
+        +":"+
+
+        String(now.getSeconds()).padStart(2,"0");
+
+}
+
+setInterval(updateClock,1000);
+
+updateClock();
+
+
+/* ================= FOTO ================= */
+
+const photos=[
+
+"https://cdn.phototourl.com/free/2026-09-10-dd18b486-94a3-4126-9d9c-851ab467f78d.jpg",
+
+"https://cdn.phototourl.com/free/2026-09-10-adc05816-2c4b-4d1d-95c9-9190635e5020.jpg",
+
+"https://cdn.phototourl.com/free/2026-09-10-7dab0fa1-3210-4a12-bc0e-5d5baf1990d1.jpg",
+
+"https://cdn.phototourl.com/free/2026-09-10-c23e553d-bf23-49b0-86b0-2d9ec584f79c.jpg",
+
+"https://cdn.phototourl.com/free/2026-09-11-1025a284-a563-472c-afe2-ddda1f6790e5.jpg",
+
+"https://cdn.phototourl.com/free/2026-09-11-22f6e902-868b-4361-b0f6-31a932d14c1a.jpg",
+
+"https://cdn.phototourl.com/free/2026-09-11-c143c41b-dece-492d-af08-012cd77a0758.jpg",
+
+"https://cdn.phototourl.com/free/2026-09-11-d4758a87-4c17-4e61-a816-93b4218fa53f.jpg",
+
+"https://cdn.phototourl.com/free/2026-09-11-24eef8e4-2cb0-48bb-ab89-a84c78404494.jpg",
+
+"https://cdn.phototourl.com/free/2026-09-11-6ddb45b3-a87b-4d01-b51a-52794755473e.jpg",
+
+"https://cdn.phototourl.com/free/2026-09-11-01601e6c-fa4b-4b92-b403-7cdfbbfb0024.jpg",
+
+"https://cdn.phototourl.com/free/2026-09-11-dbee3bd4-a65a-4036-9b48-54c1b3870fce.jpg",
+
+"https://cdn.phototourl.com/free/2026-09-11-3a33ac1b-410f-451a-80a5-b882fbe51c6a.jpg",
+
+"https://cdn.phototourl.com/free/2026-09-11-3c3aaecd-ebc5-4a36-9056-55281b22c970.jpg",
+
+"https://cdn.phototourl.com/free/2026-09-11-e9e38ee8-2ad7-4e6d-a703-5a55d651d602.jpg",
+
+"https://cdn.phototourl.com/free/2026-09-11-71bd9be6-3bcb-4c99-8589-e55c2d6d2afa.jpg"
+
+];
+
+let currentPhoto=0;
+
+const lightbox=
+document.getElementById("lightbox");
+
+const lightboxImage=
+document.getElementById("lightboxImage");
+
+const lightboxInfo=
+document.getElementById("lightboxInfo");
+
+
+/* ================= OPEN ================= */
+
+function openLightbox(index){
+
+    currentPhoto=index;
+
+    lightboxImage.src=
+        photos[currentPhoto];
+
+    updateLightbox();
+
+    lightbox.classList.add("active");
+
+    document.body.style.overflow="hidden";
+
+}
+
+
+/* ================= CLOSE ================= */
+
+function closeLightbox(){
+
+    lightbox.classList.remove("active");
+
+    document.body.style.overflow="";
+
+}
+
+
+/* ================= UPDATE ================= */
+
+function updateLightbox(){
+
+    lightboxImage.src=
+        photos[currentPhoto];
+
+    lightboxInfo.textContent=
+        "Foto "+
+        (currentPhoto+1)+
+        " dari "+
+        photos.length;
+
+}
+
+
+/* ================= NEXT ================= */
+
+function nextPhoto(){
+
+    currentPhoto++;
+
+    if(currentPhoto>=photos.length){
+        currentPhoto=0;
+    }
+
+    updateLightbox();
+
+}
+
+
+/* ================= PREVIOUS ================= */
+
+function previousPhoto(){
+
+    currentPhoto--;
+
+    if(currentPhoto<0){
+        currentPhoto=photos.length-1;
+    }
+
+    updateLightbox();
+
+}
+
+
+/* ================= KEYBOARD ================= */
+
+document.addEventListener("keydown",function(event){
+
+    if(!lightbox.classList.contains("active")){
+        return;
+    }
+
+    if(event.key==="Escape"){
+        closeLightbox();
+    }
+
+    if(event.key==="ArrowRight"){
+        nextPhoto();
+    }
+
+    if(event.key==="ArrowLeft"){
+        previousPhoto();
+    }
+
+});
+
+
+/* ================= KLIK LUAR ================= */
+
+lightbox.addEventListener("click",function(event){
+
+    if(event.target===lightbox){
+        closeLightbox();
+    }
+
+});
+
+
+/* ================= SWIPE HP ================= */
+
+let touchStartX=0;
+let touchEndX=0;
+
+lightbox.addEventListener("touchstart",function(event){
+
+    touchStartX=
+        event.changedTouches[0].screenX;
+
+},{passive:true});
+
+
+lightbox.addEventListener("touchend",function(event){
+
+    touchEndX=
+        event.changedTouches[0].screenX;
+
+    const distance=
+        touchEndX-touchStartX;
+
+    if(Math.abs(distance)<50){
+        return;
+    }
+
+    if(distance<0){
+        nextPhoto();
+    }else{
+        previousPhoto();
+    }
+
+},{passive:true});
+
+
+/* ================= PARTICLE ================= */
+
+const canvas=
+document.getElementById("particleCanvas");
+
+const ctx=
+canvas.getContext("2d");
+
+let particles=[];
+
+
+function resize(){
+
+    canvas.width=innerWidth;
+
+    canvas.height=innerHeight;
+
+}
+
+resize();
+
+window.addEventListener(
+    "resize",
+    resize
+);
+
+
+class Particle{
+
+    constructor(){
+
+        this.x=
+            Math.random()*
+            canvas.width;
+
+        this.y=
+            Math.random()*
+            canvas.height;
+
+        this.r=
+            Math.random()*3+1;
+
+        this.speed=
+            Math.random()*.6+.2;
+
+    }
+
+    update(){
+
+        this.y-=this.speed;
+
+        if(this.y<-10){
+
+            this.y=
+                canvas.height+10;
+
+            this.x=
+                Math.random()*
+                canvas.width;
+
         }
 
-        function closeMenu() {
-            sidebar.classList.remove("active");
-            overlay.classList.remove("active");
-        }
+    }
 
-        menuBtn.addEventListener("click", () => {
+    draw(){
 
-            if (sidebar.classList.contains("active")) {
-                closeMenu();
-            } else {
-                openMenu();
-            }
+        ctx.beginPath();
 
-        });
-
-        overlay.addEventListener("click", closeMenu);
-
-
-        /* ================= CLOCK ================= */
-
-        function updateClock() {
-
-            const now = new Date();
-
-            const hours =
-                String(now.getHours()).padStart(2, "0");
-
-            const minutes =
-                String(now.getMinutes()).padStart(2, "0");
-
-            const seconds =
-                String(now.getSeconds()).padStart(2, "0");
-
-            document.getElementById("clock").textContent =
-                `${hours}:${minutes}:${seconds}`;
-
-        }
-
-        updateClock();
-
-        setInterval(updateClock, 1000);
-
-
-        /* ================= BACK TO TOP ================= */
-
-        const topBtn =
-            document.getElementById("topBtn");
-
-        window.addEventListener("scroll", () => {
-
-            if (window.scrollY > 300) {
-                topBtn.style.display = "block";
-            } else {
-                topBtn.style.display = "none";
-            }
-
-        });
-
-        topBtn.addEventListener("click", () => {
-
-            window.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
-
-        });
-
-
-        /* ================= LIGHTBOX ================= */
-
-        const photos = [
-
-            "https://cdn.phototourl.com/free/2026-09-10-dd18b486-94a3-4126-9d9c-851ab467f78d.jpg",
-
-            "https://cdn.phototourl.com/free/2026-09-10-adc05816-2c4b-4d1d-95c9-9190635e5020.jpg",
-
-            "https://cdn.phototourl.com/free/2026-09-10-7dab0fa1-3210-4a12-bc0e-5d5baf1990d1.jpg",
-
-            "https://cdn.phototourl.com/free/2026-09-10-c23e553d-bf23-49b0-86b0-2d9ec584f79c.jpg",
-
-            "https://cdn.phototourl.com/free/2026-09-11-1025a284-a563-472c-afe2-ddda1f6790e5.jpg",
-
-            "https://cdn.phototourl.com/free/2026-09-11-22f6e902-868b-4361-b0f6-31a932d14c1a.jpg",
-
-            "https://cdn.phototourl.com/free/2026-09-11-c143c41b-dece-492d-af08-012cd77a0758.jpg",
-
-            "https://cdn.phototourl.com/free/2026-09-11-d4758a87-4c17-4e61-a816-93b4218fa53f.jpg",
-
-            "https://cdn.phototourl.com/free/2026-09-11-24eef8e4-2cb0-48bb-ab89-a84c78404494.jpg",
-
-            "https://cdn.phototourl.com/free/2026-09-11-6ddb45b3-a87b-4d01-b51a-52794755473e.jpg",
-
-            "https://cdn.phototourl.com/free/2026-09-11-01601e6c-fa4b-4b92-b403-7cdfbbfb0024.jpg",
-
-            "https://cdn.phototourl.com/free/2026-09-11-dbee3bd4-a65a-4036-9b48-54c1b3870fce.jpg",
-
-            "https://cdn.phototourl.com/free/2026-09-11-3a33ac1b-410f-451a-80a5-b882fbe51c6a.jpg",
-
-            "https://cdn.phototourl.com/free/2026-09-11-3c3aaecd-ebc5-4a36-9056-55281b22c970.jpg",
-
-            "https://cdn.phototourl.com/free/2026-09-11-e9e38ee8-2ad7-4e6d-a703-5a55d651d602.jpg",
-
-            "https://cdn.phototourl.com/free/2026-09-11-71bd9be6-3bcb-4c99-8589-e55c2d6d2afa.jpg"
-
-        ];
-
-        let currentPhoto = 0;
-
-        const lightbox =
-            document.getElementById("lightbox");
-
-        const lightboxImage =
-            document.getElementById("lightboxImage");
-
-        const lightboxInfo =
-            document.getElementById("lightboxInfo");
-
-        const closeLightboxBtn =
-            document.getElementById("closeLightbox");
-
-        const prevBtn =
-            document.getElementById("prevBtn");
-
-        const nextBtn =
-            document.getElementById("nextBtn");
-
-
-        function openLightbox(index) {
-
-            currentPhoto = index;
-
-            lightboxImage.src =
-                photos[currentPhoto];
-
-            updateLightboxInfo();
-
-            lightbox.classList.add("active");
-
-            document.body.style.overflow = "hidden";
-
-        }
-
-
-        function closeLightbox() {
-
-            lightbox.classList.remove("active");
-
-            document.body.style.overflow = "";
-
-        }
-
-
-        function updateLightboxInfo() {
-
-            lightboxInfo.textContent =
-                `Foto ${currentPhoto + 1} dari ${photos.length}`;
-
-        }
-
-
-        function nextPhoto() {
-
-            currentPhoto++;
-
-            if (currentPhoto >= photos.length) {
-                currentPhoto = 0;
-            }
-
-            lightboxImage.src =
-                photos[currentPhoto];
-
-            updateLightboxInfo();
-
-        }
-
-
-        function previousPhoto() {
-
-            currentPhoto--;
-
-            if (currentPhoto < 0) {
-                currentPhoto = photos.length - 1;
-            }
-
-            lightboxImage.src =
-                photos[currentPhoto];
-
-            updateLightboxInfo();
-
-        }
-
-
-        /* Tombol Lightbox */
-
-        closeLightboxBtn.addEventListener(
-            "click",
-            closeLightbox
+        ctx.arc(
+            this.x,
+            this.y,
+            this.r,
+            0,
+            Math.PI*2
         );
 
-        nextBtn.addEventListener(
-            "click",
-            nextPhoto
-        );
+        ctx.fillStyle=
+            "rgba(0,234,255,.65)";
 
-        prevBtn.addEventListener(
-            "click",
-            previousPhoto
-        );
+        ctx.shadowBlur=10;
 
+        ctx.shadowColor=
+            "#00eaff";
 
-        /* ================= KEYBOARD ================= */
+        ctx.fill();
 
-        document.addEventListener("keydown", (event) => {
+        ctx.shadowBlur=0;
 
-            if (!lightbox.classList.contains("active")) {
-                return;
-            }
+    }
 
-            if (event.key === "Escape") {
-                closeLightbox();
-            }
+}
 
-            if (event.key === "ArrowRight") {
-                nextPhoto();
-            }
 
-            if (event.key === "ArrowLeft") {
-                previousPhoto();
-            }
+for(let i=0;i<45;i++){
 
-        });
+    particles.push(
+        new Particle()
+    );
 
+}
 
-        /* ================= KLIK LUAR GAMBAR ================= */
 
-        lightbox.addEventListener("click", (event) => {
+function animate(){
 
-            if (event.target === lightbox) {
-                closeLightbox();
-            }
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
 
-        });
+    particles.forEach(p=>{
 
+        p.update();
+        p.draw();
 
-        /* ================= SWIPE HP ================= */
+    });
 
-        let touchStartX = 0;
-        let touchEndX = 0;
+    requestAnimationFrame(
+        animate
+    );
 
-        lightbox.addEventListener("touchstart", (event) => {
+}
 
-            touchStartX =
-                event.changedTouches[0].screenX;
+animate();
 
-        }, { passive: true });
-
-
-        lightbox.addEventListener("touchend", (event) => {
-
-            touchEndX =
-                event.changedTouches[0].screenX;
-
-            const distance =
-                touchEndX - touchStartX;
-
-            if (Math.abs(distance) < 50) {
-                return;
-            }
-
-            if (distance < 0) {
-                nextPhoto();
-            } else {
-                previousPhoto();
-            }
-
-        }, { passive: true });
-
-
-        /* ================= PARTICLES ================= */
-
-        const canvas =
-            document.getElementById("particleCanvas");
-
-        const ctx =
-            canvas.getContext("2d");
-
-        let particles = [];
-
-
-        function resizeCanvas() {
-
-            canvas.width =
-                window.innerWidth;
-
-            canvas.height =
-                window.innerHeight;
-
-            createParticles();
-
-        }
-
-        window.addEventListener(
-            "resize",
-            resizeCanvas
-        );
-
-
-        function createParticles() {
-
-            particles = [];
-
-            const amount =
-                Math.min(
-                    60,
-                    Math.floor(window.innerWidth / 12)
-                );
-
-            for (let i = 0; i < amount; i++) {
-
-                particles.push({
-
-                    x:
-                        Math.random() *
-                        canvas.width,
-
-                    y:
-                        Math.random() *
-                        canvas.height,
-
-                    size:
-                        Math.random() * 2 + 1,
-
-                    speedX:
-                        (Math.random() - 0.5) * 0.4,
-
-                    speedY:
-                        Math.random() * 0.7 + 0.2
-
-                });
-
-            }
-
-        }
-
-
-        resizeCanvas();
-
-
-        function animateParticles() {
-
-            ctx.clearRect(
-                0,
-                0,
-                canvas.width,
-                canvas.height
-            );
-
-            particles.forEach(p => {
-
-                p.x += p.speedX;
-                p.y += p.speedY;
-
-                if (p.y > canvas.height) {
-
-                    p.y = 0;
-
-                    p.x =
-                        Math.random() *
-                        canvas.width;
-
-                }
-
-                if (p.x < 0) {
-                    p.x = canvas.width;
-                }
-
-                if (p.x > canvas.width) {
-                    p.x = 0;
-                }
-
-                ctx.beginPath();
-
-                ctx.arc(
-                    p.x,
-                    p.y,
-                    p.size,
-                    0,
-                    Math.PI * 2
-                );
-
-                ctx.fillStyle =
-                    "rgba(0,234,255,.5)";
-
-                ctx.fill();
-
-            });
-
-            requestAnimationFrame(
-                animateParticles
-            );
-
-        }
-
-        animateParticles();
-
-    </script>
+</script>
 
 </body>
+
 </html>
